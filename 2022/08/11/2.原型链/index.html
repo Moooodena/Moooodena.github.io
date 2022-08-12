@@ -80,7 +80,7 @@
 <li>所有的对象都有 <code>__proto__</code> （或者 <code>[[prototype]]</code>）属性，称为隐式原型，属性值是一个普通对象；</li>
 <li>所有的函数都有 <code>prototype</code>  属性，称为显式原型，属性值也是一个普通的对象；</li>
 <li>所有对象的隐式原型 <code>__proto__</code> 都指向其构造函数的显式原型<code>prototype</code></li>
-<li>当试图得到对象的某个属性时，而这个对象没有该属性，那么就会去该对象的隐式原型<code>__proto__</code>中寻找；</li>
+<li>当试图得到对象的某个属性时，而这个对象没有该属性，那么就会通过其<code>__proto__</code>隐式原型去原型对象中寻找；</li>
 </ol>
 <h4 id="1-4原型对象-（通过函数的prototype属性指向）"><a href="#1-4原型对象-（通过函数的prototype属性指向）" class="headerlink" title="1.4原型对象 （通过函数的prototype属性指向）"></a>1.4原型对象 （通过函数的prototype属性指向）</h4><p>在JS中，原型对象也称为原型，它本质就是一个对象。字面意思就是原始的模型，原始祖先。</p>
 <p><strong>概念</strong>：</p>
@@ -168,7 +168,7 @@
 <p>但是 <code>Object.prototype.__proto__</code> 指向 <code>null</code>空！</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">__proto__</span> === <span class="literal">null</span></span><br></pre></td></tr></table></figure>
 
-<p><strong>正常的原型链都会终止与 Object 的原型对象</strong></p>
+<p><strong>正常的原型链都会终止于 Object 的原型对象</strong></p>
 <p><strong>Object 原型的 原型 是 <code>null</code></strong></p>
 <p>我们说的原型, 可以说是构造函数的原型, 也可以说是实例的原型</p>
 <p>(<code>Object.prototype</code>) &#x3D;&#x3D;&gt; Object的原型</p>
