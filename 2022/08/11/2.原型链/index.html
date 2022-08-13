@@ -95,14 +95,14 @@
 <p>举例：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">age</span> = age</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//   给对象原型添加方法</span></span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sing</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//   给对象原型添加属性</span></span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">cheer</span> = <span class="string">&#x27;加油&#x27;</span></span><br><span class="line"><span class="keyword">const</span> ldh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;刘德华&#x27;</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">const</span> zxy = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;张学友&#x27;</span>, <span class="number">18</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ldh)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ldh.<span class="property">__proto__</span> === <span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>) <span class="comment">// 他们都指向原型对象</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="1-5-构造函数和原型中-this-的指向"><a href="#1-5-构造函数和原型中-this-的指向" class="headerlink" title="1.5 构造函数和原型中 this 的指向"></a>1.5 构造函数和原型中 this 的指向</h4><p>我们知道，在进行构造函数实例化的过程中，<code>new</code>的执行机制分为以下四步：</p>
+<h4 id="1-5-构造函数和原型方法中-this-的指向"><a href="#1-5-构造函数和原型方法中-this-的指向" class="headerlink" title="1.5 构造函数和原型方法中 this 的指向"></a>1.5 构造函数和原型方法中 this 的指向</h4><p>我们知道，在进行构造函数实例化的过程中，<code>new</code>的执行机制分为以下四步：</p>
 <ol>
 <li>在构造函数内部创建一个空对象；</li>
 <li>让<code>this</code>指向这个空对象；</li>
 <li>执行构造函数里面的代码，给这个空对象添加相应的属性和方法（引入原型对象后构造函数里尽量没有方法）</li>
 <li>返回<code>this</code></li>
 </ol>
-<p>在构造函数实例化后，其内部的this会被清空，很难判断this的具体指向，所以我们在实例化前，声明一个全局变量<code>that</code>来接受<code>this</code>，代码如下：</p>
+<p>在构造函数实例化后，其内部的this会被清空，很难判断this的具体指向，所以我们在实例化前，声明一个全局变量<code>that</code>来接收<code>this</code>，代码如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> that <span class="comment">// 全局变量</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">  <span class="comment">// that = this</span></span><br><span class="line">  <span class="comment">// console.log(this)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sing</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">  that = <span class="variable language_">this</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> ldh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;刘德华&#x27;</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(that === ldh) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 
 <p>执行以上代码，我们可以知道：</p>
@@ -127,7 +127,7 @@
 
 <p>每一个对象都默认有一个  <code>__proto__</code> 属性,指向它的构造函数的<code>prototype</code>显式原型；</p>
 <p><code>__proto__</code> 相当于是一个桥梁,链接,实例通过它访问原型对象；</p>
-<p>所以，方法属性的查找规则可以为：</p>
+<p>所以，<strong>方法属性的查找规则</strong>可以为：</p>
 <p>首先看<code>ldh</code> 对象身上本身有没有<code>sing</code>这个方法，如果有，就执行这个对象上的<code>sing</code>方法；</p>
 <p>如果没有，就会通过<code>__proto__</code> 去实例的原型上查找；</p>
 <p>举例：</p>
@@ -215,6 +215,9 @@
                 
                 
                 <div class="article-prev-next">
+                    
+                        <a href="/2022/08/13/3.%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9B%B8%E5%85%B3/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/08/13/3.%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9B%B8%E5%85%B3/" title="发布于 2022-08-13 09:47">函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）</a>
+                        <br>
                     
                     
                         <a href="/2022/08/10/1.%E5%89%8D%E7%AB%AF%E6%89%8B%E5%86%99%E5%AE%9E%E7%8E%B0/" class="next-prefix">» </a> 下一篇：    <a href="/2022/08/10/1.%E5%89%8D%E7%AB%AF%E6%89%8B%E5%86%99%E5%AE%9E%E7%8E%B0/" title="发布于 2022-08-10 02:46">前端手写实现</a>

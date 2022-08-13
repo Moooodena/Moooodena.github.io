@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>
+        
+            函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）
+        
+    </title>
+    <link rel="shortcut icon" href="#"/>
+
+    <link type="text/css" rel="stylesheet" href="/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSerifSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="/font/Roboto.css">
+    <link type="text/css" rel="stylesheet" href="/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="/css/base.css">
+    <link type="text/css" rel="stylesheet" href="/css/code.css">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+<body>
+    <a id="cover"></a>
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
+    <div class="vertical">
+        <div class="inner">
+            
+                <h1 class="header-subtitle">函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2022-08-13
+                        </span>
+                        
+                            <span id="/2022/08/13/3.函数作用域相关/" class="leancloud_visitors" data-flag-title="函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/13/3.函数作用域相关/"></span>
+                        </span>  
+                    </p>
+                    
+                    
+                </div>
+            
+        </div>
+    </div>
+    
+</div>
+<div id="container">
+    
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h2 id="函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）"><a href="#函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）" class="headerlink" title="函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）"></a>函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）</h2><h3 id="1-作用域"><a href="#1-作用域" class="headerlink" title="1. 作用域"></a>1. 作用域</h3><blockquote>
+<p>作用域 scope : <strong>就是变量与函数的可访问范围，即作用域控制着变量和函数的可见性和生命周期。</strong></p>
+</blockquote>
+<p>ES6后作用域分为三类：全局作用域，函数作用域和块级作用域，其中函数作用域和块级作用域合称为局部作用域。</p>
+<h4 id="1-1-全局作用域"><a href="#1-1-全局作用域" class="headerlink" title="1.1 全局作用域"></a>1.1 全局作用域</h4><p><strong>全局作用域</strong> (Global Scope): 中的对象在代码中的任何地方都能访问，其生命周期伴随着页面的生命周期；</p>
+<blockquote>
+<p>直接写在script标签中的js代码，在全局作用域</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">	<span class="comment">// 全局作用域</span></span><br><span class="line">	<span class="comment">// 在全局作用域下声明一个 num 变量</span></span><br><span class="line">	<span class="keyword">const</span> num = <span class="number">6</span></span><br><span class="line">	<span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="comment">// 函数内部可以访问全局作用域的变量</span></span><br><span class="line">	<span class="variable language_">console</span>.<span class="title function_">log</span>(num)</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：</p>
+<ul>
+<li>为 window 对象动态添加的属性默认也是全局的；</li>
+<li>函数中未使用任何关键字声明的变量为全局变量；</li>
+<li>尽可能少使用全局变量，防止全局变量被污染！</li>
+</ul>
+<h4 id="1-2-局部作用域"><a href="#1-2-局部作用域" class="headerlink" title="1.2 局部作用域"></a>1.2 局部作用域</h4><p>局部作用域分为函数作用域和块级作用域（ES6）新增；</p>
+<h5 id="1-2-1-函数作用域"><a href="#1-2-1-函数作用域" class="headerlink" title="1.2.1 函数作用域"></a>1.2.1 函数作用域</h5><blockquote>
+<p>在函数内部声明的变量只能在函数内部被访问，外部无法直接访问。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getSum</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 函数内部定义的变量只对函数内部可见, 叫函数作用域(局部)</span></span><br><span class="line">    <span class="keyword">const</span> num = <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(num) <span class="comment">// Error 函数外部不能访问局部作用域.</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：</p>
+<ul>
+<li><strong>函数内部声明的变量， 在函数外部无法被访问</strong></li>
+<li>函数的形参也是函数的局部变量</li>
+<li>不同函数内部声明的变量, 无法相互访问</li>
+<li>函数执行完毕后, 函数内部的变量实际被清空了(垃圾回收)</li>
+</ul>
+<h5 id="1-2-2-块级作用域"><a href="#1-2-2-块级作用域" class="headerlink" title="1.2.2 块级作用域"></a>1.2.2 块级作用域</h5><blockquote>
+<p>ES6, <code>&#123;&#125;</code> 包裹起来的代码称为代码块, <strong>使用 let 或 const 声明的变量</strong>, 在 <code>&#123;&#125;</code> 会产生块级作用域</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt;= <span class="number">6</span>; i++) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(i)</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(i) <span class="comment">// i未定义，报错</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>var声明不会产生块级作用域</li>
+<li><strong>只有let const 才会产生块级作用域</strong></li>
+<li>不同代码块之间的变量无法相互访问</li>
+<li><strong>局部作用域声明的变量 外部不能使用</strong></li>
+</ul>
+<h4 id="1-3-作用域链"><a href="#1-3-作用域链" class="headerlink" title="1.3 作用域链"></a>1.3 作用域链</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全局作用域</span></span><br><span class="line"><span class="keyword">let</span> a = <span class="number">1</span> </span><br><span class="line"><span class="keyword">let</span> b = <span class="number">1</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 局部作用域</span></span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">g</span>(<span class="params"></span>)&#123;</span><br><span class="line">         <span class="comment">// 局部作用域</span></span><br><span class="line">        a = <span class="number">2</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(a)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">g</span>() <span class="comment">// 调用g</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">f</span>() <span class="comment">// 调用f</span></span><br></pre></td></tr></table></figure>
+
+<p>作用域链的本质是底层上的<strong>变量查找机制</strong>。</p>
+<ul>
+<li>在函数被执行时，会优先在当前函数作用域下查找变量；</li>
+<li>如果当前作用域下查找不到，会依次逐级查找父级作用域，直到全局作用域；</li>
+</ul>
+<img src="/imgs/$%7Bfiilename%7D/%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE.png" style="zoom:67%;" />
+
+<p><strong>注意</strong>：</p>
+<ul>
+<li>嵌套关系的作用域串联起来形成了作用域链；</li>
+<li>相同作用域中按着从小到大的规则查找变量；</li>
+<li>子作用域能够访问到父级作用域；但父级作用域无法访问子级作用域；</li>
+</ul>
+<h3 id="2-垃圾回收机制"><a href="#2-垃圾回收机制" class="headerlink" title="2. 垃圾回收机制"></a>2. 垃圾回收机制</h3><h4 id="2-1-垃圾回收机制概念"><a href="#2-1-垃圾回收机制概念" class="headerlink" title="2.1 垃圾回收机制概念"></a>2.1 垃圾回收机制概念</h4><p>概念：<strong>垃圾回收机制(Garbage Collection) 简称 GC</strong></p>
+<p>JS中内存的分配和闲置资源的回收都是自动完成的，内存在不使用的时候会被垃圾回收程序自动回收。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++) &#123;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">let</span> num = <span class="number">10</span></span><br><span class="line">   <span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">     <span class="keyword">const</span> str = <span class="string">&#x27;andy&#x27;</span></span><br><span class="line">     <span class="comment">// str = &#x27;lily&#x27;</span></span><br><span class="line">     <span class="variable language_">console</span>.<span class="title function_">log</span>(str)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="title function_">fn</span>()</span><br><span class="line">   <span class="title function_">fn</span>()</span><br><span class="line">   <span class="title function_">fn</span>()</span><br></pre></td></tr></table></figure>
+
+<p>以上代码所示，函数 <code>fn</code> 在每一次被调用，执行完毕后，其通过 <code>const</code>  声明的 <code>str</code> 的值都会被垃圾回收器回收，这正是它可以使用 <code>const</code> 声明的原因；</p>
+<p><strong>GC的基本思路</strong>就是：确定哪个变量不会再使用，然后释放它占用的内存。这个过程是周期性的，即垃圾回收程序每隔一定时间（或者说在代码执行过程中某个预定的收集时间）就会自动运行。</p>
+<h4 id="2-2-内存泄漏"><a href="#2-2-内存泄漏" class="headerlink" title="2.2 内存泄漏"></a>2.2 内存泄漏</h4><blockquote>
+<p>不再用到的内存，没有及时释放，就会造成内存泄漏</p>
+</blockquote>
+<p><strong>内存的生命周期</strong>：</p>
+<ul>
+<li>内存分配：当我们声明变量、函数、对象的时候，系统会自动为他们分配内存</li>
+<li>内存使用：即读写内存，也就是使用变量、函数等</li>
+<li>内存回收：使用完毕，由垃圾回收自动回收不再使用的内存</li>
+</ul>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>全局变量一般不会回收(关闭页面回收)；</li>
+<li>一般情况下局部变量的值, 不用了, 会被自动回收掉</li>
+</ul>
+<h4 id="2-3-垃圾回收的策略"><a href="#2-3-垃圾回收的策略" class="headerlink" title="2.3 垃圾回收的策略"></a>2.3 垃圾回收的策略</h4><p>现在常见的有两种垃圾回收的方法：</p>
+<ul>
+<li><strong>引用计数法</strong>（淘汰）</li>
+<li><strong>标记清除法</strong></li>
+</ul>
+<h5 id="2-3-1-引用计数法-（淘汰）"><a href="#2-3-1-引用计数法-（淘汰）" class="headerlink" title="2.3.1 引用计数法 （淘汰）"></a>2.3.1 引用计数法 （淘汰）</h5><p>IE 采用的引用计数方法，定义“内存不再使用” 的标准较为简单，就是看一个对象是否有指向它的引用；</p>
+<p>算法：</p>
+<ol>
+<li>跟踪记录每个值被引用的次数；</li>
+<li>如果这个值被引用了一次，那么就记录次数 1 ；</li>
+<li>多次引用的话就会累加；</li>
+<li>如果减少引用次数就会减 1 ；</li>
+<li>如果引用次数为 0 ，则会释放内存；</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引用计数</span></span><br><span class="line"><span class="keyword">let</span> person = &#123;</span><br><span class="line">  <span class="attr">age</span>: <span class="number">6</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;玛卡巴卡&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> p = person</span><br><span class="line">person = <span class="number">1</span></span><br><span class="line">p = <span class="literal">null</span></span><br></pre></td></tr></table></figure>
+
+<p>但是 ！ 引用计数有一个<strong>缺陷：循环引用</strong>；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引用计数 缺陷 ： 循环引用，无法回收</span></span><br><span class="line"><span class="comment">// 如果两个对象相互引用，尽管他们已不再使用，垃圾回收器不会进行回收，导致内存泄露。</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">problem</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> oA = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> oB = &#123;&#125;</span><br><span class="line">  oA.<span class="property">c</span> = oB <span class="comment">//  oB被oA引用</span></span><br><span class="line">  oB.<span class="property">d</span> = oA <span class="comment">//  oA又被oB引用</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">problem</span>()</span><br></pre></td></tr></table></figure>
+
+<p>如果两个对象相互引用，尽管他们已不再使用，垃圾回收器不会进行回收，导致内存泄露；</p>
+<h5 id="2-3-2-标记清除法"><a href="#2-3-2-标记清除法" class="headerlink" title="2.3.2 标记清除法"></a>2.3.2 标记清除法</h5><p><strong>标记清除法的核心</strong>：</p>
+<ol>
+<li>标记清除法将 “不再使用的对象”  定义为 “无法到达的对象” ；</li>
+<li>从根部（在JS中表示全局变量）出发定时扫描内存中的对象，凡是能从根部到达的对象，都是需要使用的；</li>
+<li>那些无法由根部触发触及到的对象被标记为不再使用，稍后进行回收；</li>
+</ol>
+<p><strong>其过程主要分为两个阶段</strong>：</p>
+<ul>
+<li>标记阶段：把所有活动对象做上标记。</li>
+<li>清除阶段：把没有标记（也就是非活动对象）销毁。</li>
+</ul>
+<p>标记阶段：</p>
+<p><strong>根</strong>可以理解成我们的全局作用域，GC从全局作用域的变量，沿作用域逐层往里遍历（对，是深度遍历），当遍历到堆中对象时，说明该对象被引用着，则打上一个标记，继续递归遍历（因为肯定存在堆中对象引用另一个堆中对象），直到遍历到最后一个（最深的一层作用域）节点。</p>
+<p>清除阶段：</p>
+<p>回收没有打上标记的对象；</p>
+<h3 id="3-闭包"><a href="#3-闭包" class="headerlink" title="3. 闭包"></a>3. 闭包</h3><h4 id="3-1-闭包的基本概念"><a href="#3-1-闭包的基本概念" class="headerlink" title="3.1 闭包的基本概念"></a>3.1 闭包的基本概念</h4><p>闭包 closure<br>定义：内部函数引用外部函数的集合，即 <strong>闭包 &#x3D; 内层函数 + 外层函数的变量</strong><br>内层函数一定要引用外层函数的变量，称为外层函数的闭包<br><strong>作用: 外部能够访问到函数内部的变量</strong></p>
+<p>相关条件：</p>
+<ol>
+<li>首先要有内层函数</li>
+<li>内层函数使用了外层函数的变量</li>
+</ol>
+<p>闭包的简单写法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//   简单写法</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">outer</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 外层函数outer  把内存函数和这个被引用的变量，包起来</span></span><br><span class="line">  <span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">fn</span>()</span><br><span class="line">&#125;</span><br><span class="line"> <span class="title function_">outer</span>() <span class="comment">//产生一个闭包</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-常见的闭包形式"><a href="#3-2-常见的闭包形式" class="headerlink" title="3.2 常见的闭包形式"></a>3.2 常见的闭包形式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 常见的闭包形式</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">outer</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// fn()</span></span><br><span class="line">  <span class="keyword">return</span> fn</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//   outer() ===&gt; fn  ==&gt;  fn()&#123;console.log(a)&#125;</span></span><br><span class="line"><span class="keyword">const</span> fun = <span class="title function_">outer</span>()</span><br><span class="line"><span class="title function_">fun</span>() <span class="comment">// 虽然看上去是外部函数，本质上，还是调用了 fn() 这个函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//   </span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">out1</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">100</span> <span class="comment">//局部变量</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> fun1 = <span class="title function_">out1</span>()</span><br><span class="line"><span class="title function_">fun1</span>()</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-闭包的应用（实现数据的私有）"><a href="#3-3-闭包的应用（实现数据的私有）" class="headerlink" title="3.3 闭包的应用（实现数据的私有）"></a>3.3 闭包的应用（实现数据的私有）</h4><h5 id="3-3-1-统计函数被调用的次数"><a href="#3-3-1-统计函数被调用的次数" class="headerlink" title="3.3.1 统计函数被调用的次数"></a>3.3.1 统计函数被调用的次数</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 闭包应用</span></span><br><span class="line"><span class="comment">// 统计函数调用次数</span></span><br><span class="line"><span class="comment">// 普通方式</span></span><br><span class="line"><span class="comment">//   此时外部可以修改 i 的值</span></span><br><span class="line"><span class="keyword">let</span> i = <span class="number">0</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  i++</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`函数被调用<span class="subst">$&#123;i&#125;</span>次`</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>()</span><br><span class="line"><span class="comment">//  闭包的方式来写</span></span><br><span class="line"><span class="comment">// 记录函数调用的次数，外部不能修改这个 i 变量，但是可以访问</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">count</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span> <span class="comment">//局部变量</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    i++</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`函数被调用<span class="subst">$&#123;i&#125;</span>次`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> fun = <span class="title function_">count</span>()</span><br><span class="line"><span class="title function_">fun</span>() <span class="comment">//此时执行内层函数</span></span><br></pre></td></tr></table></figure>
+
+<p> <strong>闭包可能会产生的问题：内存泄漏</strong><br> 变量没有被回收<br> 本来 <code>i</code> 是函数的局部变量，调用外层函数<code>count()</code> 后应该被垃圾回收释放内存，<br> 但每次调用<code>fun()</code> 时，因为闭包，能够访问到  <code>i</code>，说明  <code>i</code>  没有被回收，所以会造成内存泄漏<br> <strong>闭包应用：节流  防抖</strong><br> <strong>节流</strong>: throttle  减少事件的执行频率. 例如规定 50ms 执行一次;<br> <strong>防抖:</strong> debounce  比如点击按钮, 打印一句话  500ms内只触发一次,多次点击无用;</p>
+<h3 id="4-变量提升"><a href="#4-变量提升" class="headerlink" title="4. 变量提升"></a>4. 变量提升</h3><h4 id="4-1-变量提升"><a href="#4-1-变量提升" class="headerlink" title="4.1 变量提升"></a>4.1 变量提升</h4><p>变量提升是 JS 中比较奇怪的现象，它允许在声明变量之前即被访问（仅存在于 var 声明的变量）</p>
+<p>注意：</p>
+<ol>
+<li>变量在未声明即被访问时会报语法错误；</li>
+<li><strong>变量在 var 声明前即被访问，变量的值为 undefined</strong> ；</li>
+<li><strong>let &#x2F; const 声明的变量不存在变量提升</strong>；</li>
+<li>变量提升出现在相同的作用域中；</li>
+<li>实际开发中应先声明再访问变量；</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. var 声明的变量,会被提升到当前作用域的最顶层</span></span><br><span class="line"><span class="comment">// 2. 只提升声明,不提升赋值</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(num + <span class="string">&#x27;件&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> num = <span class="number">10</span></span><br><span class="line"><span class="comment">// var num</span></span><br><span class="line"><span class="comment">// console.log(num + &#x27;件&#x27;)</span></span><br><span class="line"><span class="comment">// num = 10</span></span><br><span class="line"><span class="comment">// console.log(num)</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 只提升到当前作用域的最前</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(num)</span><br><span class="line">  <span class="keyword">var</span> num = <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>()</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-函数提升"><a href="#4-2-函数提升" class="headerlink" title="4.2 函数提升"></a>4.2 函数提升</h4><p>定义函数有两种方式：</p>
+<p>function 声明的函数， 会提升到当前作用域最顶层。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">声明式</span><br><span class="line"><span class="title function_">fn</span>() </span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">123</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用var声明的函数，会提升声明， 赋值不提升。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fn <span class="comment">// undefined</span></span><br><span class="line"><span class="title function_">fn</span>()</span><br><span class="line">fn = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">111</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-函数参数"><a href="#5-函数参数" class="headerlink" title="5. 函数参数"></a>5. 函数参数</h3><h4 id="5-1-函数的动态参数-arguments"><a href="#5-1-函数的动态参数-arguments" class="headerlink" title="5.1 函数的动态参数 arguments"></a>5.1 函数的动态参数 arguments</h4><ul>
+<li>所有的函数都内置了（默认就存在，自带的）一个 <code>arguments</code> 对象；</li>
+<li><code>arguments</code> 是一个<strong>伪数组</strong>（想想什么是伪数组）， 存储了传递来的所有实参；</li>
+<li>它只存在于函数中；</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getSum</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="variable language_">arguments</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    sum += <span class="variable language_">arguments</span>[i]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(sum)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">getSum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="5-2-剩余参数-rest"><a href="#5-2-剩余参数-rest" class="headerlink" title="5.2 剩余参数 rest"></a>5.2 剩余参数 rest</h4><p>ES6 引入 rest 参数（形式为<code>...变量名</code>）ES6新增，用于获取函数的多余参数，这样就不需要使用<code>arguments</code>对象了。rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。</p>
+<p><strong>语法:  …变量</strong><br>rest 剩余参数，是一个<strong>真实的数组</strong>，存了剩余的实参</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getSum</span>(<span class="params">...arr</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(arr)</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    sum += arr[i]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(sum)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//   不能写到参数的中间, 只能在最后一位</span></span><br><span class="line"><span class="comment">//   function getSum(a,...arr,b)&#123;  // 提示报错</span></span><br><span class="line"><span class="comment">//       console.log(arr)</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="title function_">getSum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-3-拓展-扩展运算符-…arr"><a href="#5-3-拓展-扩展运算符-…arr" class="headerlink" title="5.3 拓展 扩展运算符(…arr)"></a>5.3 拓展 扩展运算符(…arr)</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 扩展运算符(...arr) 将一个数组进行展开,成为一个参数列表</span></span><br><span class="line"><span class="comment">//   const arr = [1, 5, 3, 8, 2]</span></span><br><span class="line"><span class="comment">//   console.log(...arr)</span></span><br><span class="line"><span class="comment">// 注意: 不会修改原数组</span></span><br><span class="line"><span class="comment">//   主要应用</span></span><br><span class="line"><span class="comment">// 1.求数组最大最小值</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Math</span>.<span class="title function_">max</span>(...arr)) <span class="comment">//Math.max() 接受的是参数列表</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Math</span>.<span class="title function_">min</span>(...arr))</span><br><span class="line"><span class="comment">// 2.合并数组</span></span><br><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> arr2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="keyword">const</span> arr3 = [...arr1, ...arr2]</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr3)</span><br></pre></td></tr></table></figure>
+
+<p>注意<strong>展开运算符与函数的剩余参数的区别</strong>：</p>
+<ul>
+<li>展开运算符在数组中使用，将数组的元素展开；</li>
+<li>剩余参数在函数中使用，它得到一个真数组；</li>
+</ul>
+<h3 id="6-箭头函数"><a href="#6-箭头函数" class="headerlink" title="6. 箭头函数"></a>6. 箭头函数</h3><blockquote>
+<p>ES6 允许使用“箭头”（<code>=&gt;</code>）定义函数。 箭头函数</p>
+</blockquote>
+<h4 id="6-1-箭头函数的使用"><a href="#6-1-箭头函数的使用" class="headerlink" title="6.1 箭头函数的使用"></a>6.1 箭头函数的使用</h4><p>一般函数的定义式:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fn = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>通过箭头函数来定义的话：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fn1</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn1</span>()</span><br></pre></td></tr></table></figure>
+
+<p>箭头函数的传参：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fn2</span> = (<span class="params">x</span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(x)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn2</span>(<span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+
+<p>只有一个形参的时候,可以省略小括号：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fn3</span> = x =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(x)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn3</span>(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>只有一行代码的时候,可以省略花括号{}：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fn4</span> = x =&gt; <span class="variable language_">console</span>.<span class="title function_">log</span>(x)</span><br><span class="line"><span class="title function_">fn4</span>(<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>只有一行代码时,可以省略 return：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fn5_</span> = x =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> x + x</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fn5</span> = x =&gt; x + x</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">fn5</span>(<span class="number">6</span>))</span><br></pre></td></tr></table></figure>
+
+<p>箭头函数可以直接返回一个对象, 但必须在对象外面加上小括号：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fn6_</span> = (<span class="params">name</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;user_name : name&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fn6</span> = (<span class="params">name</span>) =&gt; (&#123;user_name : name&#125;)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">fn6</span>(<span class="string">&#x27;周杰伦&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>举个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getSum_</span>(<span class="params">...arr</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(arr)</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    sum += arr[i]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(sum)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">getSum_</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//   改为箭头函数</span></span><br><span class="line"><span class="comment">// 箭头函数没有arguments动态参数,但有rest剩余参数</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getSum</span> = (<span class="params">...arr</span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(arr)</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    sum += arr[i]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(sum)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">getSum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>注意：<strong>箭头函数没有arguments动态参数,但有rest剩余参数</strong></p>
+<h4 id="6-2-箭头函数里this的指向"><a href="#6-2-箭头函数里this的指向" class="headerlink" title="6.2 箭头函数里this的指向"></a>6.2 箭头函数里this的指向</h4><p>之前学过”粗略“的this指向：<strong>谁调用就指向谁</strong>。因为this 在定义的时候，不能确定this的指向，只有执行的时候才能确定。</p>
+<p>1.对于普通函数，定时器，this指向window</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>)  <span class="comment">// window</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>()  <span class="comment">// window.fn()</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>)  <span class="comment">// window</span></span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"><span class="variable language_">window</span>.<span class="built_in">setTimeout</span>()</span><br></pre></td></tr></table></figure>
+
+<p>2.对于对象，谁调用就指向谁</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;xd&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span>,</span><br><span class="line">  <span class="attr">sayHi</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>) <span class="comment">// obj</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line">obj.<span class="title function_">sayHi</span>()</span><br></pre></td></tr></table></figure>
+
+<p>3.进行事件监听时</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> btn = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.btn&#x27;</span>)</span><br><span class="line">btn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>) <span class="comment">// 绑定事件的元素</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">target</span>) <span class="comment">// 触发事件的元素 点的谁指向谁</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">currentTarget</span>) <span class="comment">// 绑定事件的元素， 同this</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>4.箭头函数里的this指向</p>
+<p><strong>箭头函数中的this 是上层作用域的this,其箭头函数本身没有this</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fn</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>() <span class="comment">// 此时this指向 window</span></span><br></pre></td></tr></table></figure>
+
+<p>并且在对象里，不建议使用箭头函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//   对象里面不建议使用箭头函数</span></span><br><span class="line"><span class="keyword">const</span> obj_j = &#123;</span><br><span class="line">  <span class="attr">user</span>: <span class="string">&#x27;xx&#x27;</span>,</span><br><span class="line">  <span class="attr">sayHi</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>) <span class="comment">// this 指向 window</span></span><br><span class="line">    <span class="comment">//   箭头函数里面没有this,会去上层作用域找this</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line">obj_j.<span class="title function_">sayHi</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Moooodena">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Moooodena
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/08/13/3.%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9B%B8%E5%85%B3/" target="_blank">函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                
+                <div class="article-prev-next">
+                    
+                    
+                        <a href="/2022/08/11/2.%E5%8E%9F%E5%9E%8B%E9%93%BE/" class="next-prefix">» </a> 下一篇：    <a href="/2022/08/11/2.%E5%8E%9F%E5%9E%8B%E9%93%BE/" title="发布于 2022-08-11 08:09">原型链相关</a>
+                    
+                </div>
+            </div>
+            
+    <div class="article-comments">
+        
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+
+        </div>
+    
+</div>
+    <div id="footer"></div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        
+            <div class="menu-notice">
+                <span class="iconfont icon-notice"></span>
+                <div class="notice">
+                    <span>简单地活着，肆意而又精彩！</span>
+                </div>
+            </div>
+        
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar">
+                    <img src="/image/sidebar/avatar.jpg">
+                </div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user"><span>Moooodena</span></div>
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul>
+                    
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                    
+                        <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
+                    
+                        <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
+                    
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                    
+                        <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
+                    
+                        <li class=""><a href="/about" class="" target="_self"><span class="iconfont icon-about-fill"></span>关于</a></li>
+                    
+                        <li class=""><a href="/atom.xml" class="" target="_blank"><span class="iconfont icon-rss"></span>订阅</a></li>
+                    
+                        <li class=""><a href="javascript:;" class="search" target="_self"><span class="iconfont icon-search-menu"></span>搜索</a></li>
+                    
+                        <li class=""><a href="/comment" class="" target="_self"><span class="iconfont icon-comments-fill"></span>留言板</a></li>
+                    
+                        <li class=""><a href="/friend" class="" target="_self"><span class="iconfont icon-link"></span>友情链接</a></li>
+                    
+                </ul> 
+            </div> 
+            <div class="menu-link">
+                <div class="box">
+                    <div class="image-box"></div>
+                </div>
+                
+                    <a name="知乎" href="" class="" target="_blank" data=""><span class="iconfont icon-zhihu"></span></a>
+                
+                    <a name="微博" href="" class="" target="_blank" data=""><span class="iconfont icon-weibo"></span></a>
+                
+                    <a name="QQ" href="javascript:;" class="image" target="_self" data="/image/sidebar/qq.png"><span class="iconfont icon-qq"></span></a>
+                
+                    <a name="微信" href="javascript:;" class="image" target="_self" data="/image/sidebar/Wechat.png"><span class="iconfont icon-wechat"></span></a>
+                
+                    <a name="GitHub" href="https://github.com/Moooodena" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                
+            </div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="/css/search.css">
+<script type="text/javascript" src="/js/iscroll.js"></script>
+<script type="text/javascript" src="/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+
+    
+        <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
+        <script type="text/javascript" src="/js/APlayer.min.js"></script>
+        <script type="text/javascript" src="/js/Meting.min.js"></script>
+        <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+    
+    
+    <div class="wrap-right">
+        <div class="setting">
+            <div class="iconbox favorites" switch="false">
+                <span class="iconfont icon-favorites"></span>
+                <span class="icontext">关注</span>
+            </div>
+            <div class="iconbox mode">
+                <div class="light">
+                    <span class="iconfont icon-daymode"></span>
+                    <span class="icontext">浅色模式</span>
+                </div>
+                <div class="dark">
+                    <span class="iconfont icon-nightmode-fill"></span>
+                    <span class="icontext">深色模式</span>
+                </div>
+            </div>
+            <a href="javascript:;" target="_self" class="search">
+                <div class="iconbox">
+                    <span class="iconfont icon-search-menu"></span>
+                    <span class="icontext">搜索</span>
+                </div>
+            </a>
+            <div class="iconbox bottom">
+                <div style="display: inline-block; transform: rotate(180deg);">
+                    <span class="iconfont icon-top"></span>
+                </div>
+                <span class="icontext">跳至底部</span>
+            </div>
+        </div>
+        <div class="iconbox set">
+            <div style="display: inline-block;">
+                <span class="iconfont icon-setting"></span>
+            </div>
+            <span class="icontext">设置</span>
+        </div>
+        <div class="iconbox top">
+            <span class="iconfont icon-top"></span>
+            <span class="icontext">返回顶部</span>
+        </div>
+    </div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : "Modena",
+        GitHubRepositories : "Hexo-LiveForCode",
+
+        User             : "Moooodena",
+        UserAvatar       : "/image/sidebar/avatar.jpg",
+        WebsiteStartDate : "2022-08-10",
+
+        WebsiteTitleBlur         : "Moooodena的blog",
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : "(*´∇｀*) 欢迎回来!",
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : "/image/website/logo.png",
+
+        ProgressBar : {
+            id       : "topProgressBar",
+            color    : "#77B6FF",
+            height   : "2px",
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound : {
+                tension  : 16,
+                friction : 5
+            },
+            spinner : {
+                id     : "spinner",
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : "#F0F0F0",
+                    stroke     : "#272633",
+                    base       : "",
+                    child      : "#272633"
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : "rgba(255, 255, 255, .2)",
+            clearOffset : 0.3
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : "60%",
+            colorBrightness  : "50%",
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : "random",
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                "/image/header/home.jpg",
+            
+                "/image/header/home.jpeg",
+            
+        ],
+        HomeBannerText  : "",
+
+        ArticleHeaderImage : [
+            
+                "/image/header/article.jpg",
+            
+        ],
+
+        OtherBannerText : "",
+
+        Error : {
+            icon    : "icon-swimming",
+            title   : "PAGE NOT FOUND",
+            content : [
+                
+                    "很抱歉，您访问的页面不存在！",
+                
+                    "可能是输入地址有误或该地址已变更。",
+                
+            ],
+            buttons : [
+                
+                    {
+                        icon  : "icon-home",
+                        text  : "返回首页",
+                        href  : "/",
+                        class : ""
+                    },
+                
+            ]
+        },
+
+        MenuNotice : {
+            enable : true,
+            notice : "简单地活着，肆意而又精彩！",
+            speed  : 20
+        },
+        MenuList : [
+            
+                {
+                    name   : "首页",
+                    icon   : "icon-home-fill",
+                    href   : "/",
+                    type   : "index",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "分类",
+                    icon   : "icon-folder-fill",
+                    href   : "/category",
+                    type   : "category",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "标签",
+                    icon   : "icon-discount-fill",
+                    href   : "/tag",
+                    type   : "tag",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "归档",
+                    icon   : "icon-calendar-fill",
+                    href   : "/archive",
+                    type   : "archive",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "赞赏",
+                    icon   : "icon-heart-fill",
+                    href   : "/donate",
+                    type   : "donate",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "关于",
+                    icon   : "icon-about-fill",
+                    href   : "/about",
+                    type   : "about",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "订阅",
+                    icon   : "icon-rss",
+                    href   : "/atom.xml",
+                    type   : "",
+                    class  : "",
+                    target : "_blank"
+                },
+            
+                {
+                    name   : "搜索",
+                    icon   : "icon-search-menu",
+                    href   : "javascript:;",
+                    type   : "",
+                    class  : "search",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "留言板",
+                    icon   : "icon-comments-fill",
+                    href   : "/comment",
+                    type   : "comment",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "友情链接",
+                    icon   : "icon-link",
+                    href   : "/friend",
+                    type   : "friend",
+                    class  : "",
+                    target : "_self"
+                },
+            
+        ],
+        MenuLink : [
+            
+                
+                    {
+                        name   : "知乎",
+                        icon   : "icon-zhihu",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "微博",
+                        icon   : "icon-weibo",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "QQ",
+                        icon   : "icon-qq",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/qq.png"
+                    },
+                
+                    {
+                        name   : "微信",
+                        icon   : "icon-wechat",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/Wechat.png"
+                    },
+                
+                    {
+                        name   : "GitHub",
+                        icon   : "icon-github",
+                        href   : "https://github.com/Moooodena",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : "<div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2022 Modena. All Rights Reserved.</div>",
+
+        ConsoleList : [
+            
+                
+                    [
+                        
+                            
+                                "Based on cnblogs theme SimpleMemory.",
+                            
+                                "",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "SimpleMemory Author:",
+                            
+                                "BNDong",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "Theme:",
+                            
+                                "LiveForCode",
+                            
+                        
+                    ],
+                
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : "",
+            bitcoin : "",
+            alipay  : "/image/donate/alipay.png",
+            wechat  : "/image/donate/wechat.png"
+        },
+
+        Search : {
+            applicationID : "010C3EANT8",
+            apiKey        : "c7abab9f11b79102b9aff7fe6d41447d",
+            indexName     : "Notes",
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : "搜索",
+                empty       : "未发现与 「${query}」 相关的内容",
+                stats       : "${hits} 条相关条目，使用了 ${time} 毫秒",
+            }
+        }, 
+
+        Valine : {
+            switch         : true,
+            el             : ".comments-content",
+            appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
+            appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
+            serverURLs     : "",
+            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            avatar         : "mm",
+            meta           : "nick,mail,link",
+            requiredFields : "nick,mail",
+            pageSize       : 5,
+            lang           : "zh-cn",
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : ".toc",
+            contentSelector       : ".article-body",
+            headingSelector       : "h1, h2, h3, h4, h5",
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : ".toc",
+            positionFixedClass    : "toc-fixed",
+            fixedSidebarOffset    : "",
+        },
+
+        Require : {
+            baseUrl     : "/js/",
+            waitSeconds : 100
+        },
+
+        Music : {
+            type : "Meting"
+        },
+        APlayer : {
+            container : ".aplayer",
+            fixed     : true,
+            autoplay  : false,
+            loop      : "all",
+            order     : "random",
+            preload   : "auto",
+            volume    : 0.67,
+            mutex     : true,
+            lrcType   : 3,
+            audio     : [
+                
+                    {
+                        name   : "Endless Tears",
+                        artist : "CLIFF EDGE",
+                        cover  : "/music/cover/Endless Tears.jpg",
+                        url    : "/music/song/Endless Tears.mp3",
+                        lrc    : "/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        },
+        Meting : {
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        Mouse : {
+            enable  : true,
+            options : {
+                size  : 6,
+                sizeF : 24
+            }
+        },
+
+        LazyLoad : {
+            default : "/image/website/lazyload.svg"
+        },
+  
+        Style : {
+            aplayer          : "/css/APlayer.css",
+            archive          : "/css/archive.css",
+            base             : "/css/base.css",
+            clipboard        : "/css/clipboard.css",
+            code             : "/css/code.css",
+            donate           : "/css/donate.css",
+            fancybox         : "/css/jquery.fancybox.css",
+            footer           : "/css/footer.css",
+            iconfont         : "/iconfont/iconfont.css",
+            index            : "/css/index.css",
+            menuBubble       : "/css/menu-bubble.css",
+            mouse            : "/css/mouse.css",
+            page             : "/css/page.css",
+            post             : "/css/post.css",
+            search           : "/css/search.css",
+            tocbot           : "/css/tocbot.css",
+            valine           : "/css/valine.css"
+        },
+
+        Script: {
+            aplayer          : "/js/APlayer.min.js",
+            config           : "/js/require.config.js",
+            index            : "/js/index.js",
+            instantSearch    : "/js/instantsearch.min.js",
+            iscroll          : "/js/iscroll.js",
+            jQuery           : "/js/jquery-3.4.1.min.js",
+            loading          : "/js/loading.js",
+            meting           : "/js/Meting.min.js",
+            require          : "/js/require.min.js"
+        },
+
+        Font: {
+            LongCang    : "/font/LongCang.css",
+            Monda       : "/font/Monda.css",
+            NotoSansSC  : "/font/NotoSansSC.css",
+            NotoSerifSC : "/font/NotoSerifSC.css",
+            Playball    : "/font/Playball.css",
+            PTMono      : "/font/PTMono.css",
+            Roboto      : "/font/Roboto.css",
+            RobotoSlab  : "/font/RobotoSlab.css",
+            Rosario     : "/font/Rosario.css",
+            UbuntuMono  : "/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : "简单地活着, 肆意又精彩."
+        },
+            
+        Theme : {
+            url  : "https://github.com/first19326/Hexo-LiveForCode",
+            name : "Hexo - Live For Code"
+        }  
+    };
+</script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>
