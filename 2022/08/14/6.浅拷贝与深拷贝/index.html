@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>
+        
+            浅拷贝与深拷贝
+        
+    </title>
+    <link rel="shortcut icon" href="#"/>
+
+    <link type="text/css" rel="stylesheet" href="/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSerifSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="/font/Roboto.css">
+    <link type="text/css" rel="stylesheet" href="/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="/css/base.css">
+    <link type="text/css" rel="stylesheet" href="/css/code.css">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+<body>
+    <a id="cover"></a>
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
+    <div class="vertical">
+        <div class="inner">
+            
+                <h1 class="header-subtitle">浅拷贝与深拷贝</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2022-08-14
+                        </span>
+                        
+                            <span id="/2022/08/14/6.浅拷贝与深拷贝/" class="leancloud_visitors" data-flag-title="浅拷贝与深拷贝">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/14/6.浅拷贝与深拷贝/"></span>
+                        </span>  
+                    </p>
+                    
+                    
+                </div>
+            
+        </div>
+    </div>
+    
+</div>
+<div id="container">
+    
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h2 id="浅拷贝与深拷贝"><a href="#浅拷贝与深拷贝" class="headerlink" title="浅拷贝与深拷贝"></a>浅拷贝与深拷贝</h2><h3 id="1-浅拷贝和深拷贝的概念"><a href="#1-浅拷贝和深拷贝的概念" class="headerlink" title="1. 浅拷贝和深拷贝的概念"></a>1. 浅拷贝和深拷贝的概念</h3><h4 id="1-1-浅拷贝"><a href="#1-1-浅拷贝" class="headerlink" title="1.1 浅拷贝"></a>1.1 浅拷贝</h4><p>浅拷贝是创建一个新对象，这个对象有着原始对象属性值的一份精确拷贝。如果属性是基本类型，拷贝的就是基本类型的值，如果属性是引用类型，拷贝的就是内存地址 ，所以<strong>如果其中一个对象改变了这个地址，就会影响到另一个对象</strong>。</p>
+<img src="/%E6%B5%85%E6%8B%B7%E8%B4%9D-16604797465234.png" style="zoom: 33%;" />
+
+<h4 id="1-2-深拷贝"><a href="#1-2-深拷贝" class="headerlink" title="1.2 深拷贝"></a>1.2 深拷贝</h4><p>在堆内存中开辟一个新的空间存放新对象，拷贝原对象的所有属性（对对象的子对象递归拷贝），<strong>拷贝前后两个对象互不影响；</strong></p>
+<p><strong>递归拷贝：一层一层，每一层都新建一个内存空间</strong></p>
+<img src="/%E6%B7%B1%E6%8B%B7%E8%B4%9D-16604797615046.png" style="zoom: 67%;" />
+
+<p><strong>小结</strong>：浅拷贝创建一个新对象后，只复制对象的指针，不复制对象本身，新旧对象可以共享同一内存，其中一个对象改变了地址，也会影响另一个；</p>
+<p>深拷贝创建一个新对象后，拷贝原对象的所有属性（对对象的子对象递归拷贝），拷贝前后两个对象互不影响；</p>
+<h3 id="2-赋值、浅拷贝和深拷贝的区别"><a href="#2-赋值、浅拷贝和深拷贝的区别" class="headerlink" title="2. 赋值、浅拷贝和深拷贝的区别"></a>2. 赋值、浅拷贝和深拷贝的区别</h3><p><strong>赋值</strong>：对于基础数据类型，值传递， 赋值之后两个变量互不影响；对于引用类型，赋址（地址），两个变量具有相同的引用，指向同一个对象，相互之间有影响；<strong>不会创建一个新对象！</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//   值类型</span></span><br><span class="line"><span class="keyword">let</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">let</span> b = a</span><br><span class="line">b = <span class="number">2</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a, b) <span class="comment">// 1, 2</span></span><br><span class="line"><span class="comment">//   引用类型</span></span><br><span class="line"><span class="keyword">let</span> obj1 = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;JS&#x27;</span>,</span><br><span class="line">  <span class="attr">book</span>: &#123;</span><br><span class="line">    <span class="attr">title</span>: <span class="string">`you don&#x27;t know JS`</span>,</span><br><span class="line">    <span class="attr">price</span>: <span class="string">&#x27;169&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj2 = obj1</span><br><span class="line">obj2.<span class="property">name</span> = <span class="string">&#x27;Hello World&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj1)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj2)</span><br><span class="line"><span class="comment">//   在开发中，并不希望改变变量obj2 之后 影响到obj1， 这个时候就需要用到浅拷贝和深拷贝</span></span><br></pre></td></tr></table></figure>
+
+<p>浅拷贝：<strong>重新在堆中创建内存</strong>，拷贝前后对象的基本数据类型互不影响，但拷贝前后对象的引用类型因共享同一块内存，会相互影响。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;JS&#x27;</span>,</span><br><span class="line">  <span class="attr">book</span>: &#123;</span><br><span class="line">    <span class="attr">title</span>: <span class="string">`you don&#x27;t know JS`</span>,</span><br><span class="line">    <span class="attr">price</span>: <span class="string">&#x27;169&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> b = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, a) <span class="comment">// 一种实现浅拷贝的方法</span></span><br><span class="line"><span class="comment">//   console.log(b)</span></span><br><span class="line"><span class="comment">// 第一层， 值类型，相互不影响</span></span><br><span class="line">a.<span class="property">name</span> = <span class="string">&#x27;change&#x27;</span></span><br><span class="line"><span class="comment">//   console.log(a)</span></span><br><span class="line"><span class="comment">//   console.log(b)</span></span><br><span class="line">a.<span class="property">book</span>.<span class="property">price</span> = <span class="string">&#x27;99&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a.<span class="property">book</span> === b.<span class="property">book</span>) <span class="comment">// true 新旧两个对象共享同一块内存空间</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a.<span class="property">book</span>.<span class="property">price</span> === b.<span class="property">book</span>.<span class="property">price</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>深拷贝</strong>：<strong>深拷贝创建一个新对象</strong>后，拷贝原对象的所有属性（对对象的子对象递归拷贝），拷贝前后两个对象互不影响；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;../04-code/lodash.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">const</span> obj = &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">&#x27;zjl&#x27;</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">age</span>: <span class="number">18</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">hobby</span>: [<span class="string">&#x27;dance&#x27;</span>, <span class="string">&#x27;music&#x27;</span>],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">book</span>: &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">book_name</span>: <span class="string">&#x27;Golang&#x27;</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">price</span>: <span class="number">66</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">const</span> o = _.<span class="title function_">cloneDeep</span>(obj)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="variable language_">console</span>.<span class="title function_">log</span>(o)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  o.<span class="property">hobby</span>[<span class="number">0</span>] = <span class="string">&#x27;sing&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  o.<span class="property">book</span>.<span class="property">price</span> = <span class="number">88</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="variable language_">console</span>.<span class="title function_">log</span>(o)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="variable language_">console</span>.<span class="title function_">log</span>(obj)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/%E8%B5%8B%E5%80%BC%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%89%E8%80%85%E6%AF%94%E8%BE%83.png"></p>
+<h3 id="3-如何实现浅拷贝"><a href="#3-如何实现浅拷贝" class="headerlink" title="3. 如何实现浅拷贝"></a>3. 如何实现浅拷贝</h3><h4 id="3-1-Object-assign"><a href="#3-1-Object-assign" class="headerlink" title="3.1 Object.assign()"></a>3.1 Object.assign()</h4><p>Object.assign() 方法可以把任意多个的源对象自身的可枚举属性拷贝给目标对象，然后返回目标对象；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;JS&#x27;</span>,</span><br><span class="line">  <span class="attr">book</span>: &#123;</span><br><span class="line">    <span class="attr">title</span>: <span class="string">`you don&#x27;t know JS`</span>,</span><br><span class="line">    <span class="attr">price</span>: <span class="string">&#x27;169&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> b = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, a)</span><br><span class="line"><span class="comment">//   console.log(b)</span></span><br><span class="line"><span class="comment">// 第一层， 值类型，相互不影响</span></span><br><span class="line">a.<span class="property">name</span> = <span class="string">&#x27;change&#x27;</span></span><br><span class="line"><span class="comment">//   console.log(a)</span></span><br><span class="line"><span class="comment">//   console.log(b)</span></span><br><span class="line">a.<span class="property">book</span>.<span class="property">price</span> = <span class="string">&#x27;99&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a.<span class="property">book</span> === b.<span class="property">book</span>) <span class="comment">// true 新旧两个对象共享同一块内存空间</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a.<span class="property">book</span>.<span class="property">price</span> === b.<span class="property">book</span>.<span class="property">price</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-扩展运算符（展开运算符）Spread…"><a href="#3-2-扩展运算符（展开运算符）Spread…" class="headerlink" title="3.2 扩展运算符（展开运算符）Spread…"></a>3.2 扩展运算符（展开运算符）Spread…</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> c = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;JS&#x27;</span>,</span><br><span class="line">  <span class="attr">book</span>: &#123;</span><br><span class="line">    <span class="attr">title</span>: <span class="string">`you don&#x27;t know JS`</span>,</span><br><span class="line">    <span class="attr">price</span>: <span class="string">&#x27;169&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 浅拷贝</span></span><br><span class="line"><span class="keyword">let</span> d = &#123; ...c &#125;</span><br><span class="line">c.<span class="property">name</span> = <span class="string">&#x27;change&#x27;</span></span><br><span class="line"><span class="comment">// console.log(c)</span></span><br><span class="line"><span class="comment">// console.log(d)</span></span><br><span class="line">c.<span class="property">book</span>.<span class="property">price</span> = <span class="string">&#x27;66&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(c)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(d)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-Array-prototype-concat"><a href="#3-3-Array-prototype-concat" class="headerlink" title="3.3 Array.prototype.concat()"></a>3.3 Array.prototype.concat()</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>, <span class="number">2</span>, &#123; <span class="attr">username</span>: <span class="string">&#x27;zjl&#x27;</span> &#125;]</span><br><span class="line"><span class="keyword">let</span> arr2 = arr.<span class="title function_">concat</span>() <span class="comment">// 拷贝arr</span></span><br><span class="line"><span class="comment">// console.log(arr2)</span></span><br><span class="line">arr2[<span class="number">2</span>].<span class="property">username</span> = <span class="string">&#x27;ldh&#x27;</span></span><br><span class="line">arr2[<span class="number">0</span>] = <span class="number">8</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr2)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-Array-prototype-slice"><a href="#3-4-Array-prototype-slice" class="headerlink" title="3.4 Array.prototype.slice()"></a>3.4 Array.prototype.slice()</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// let arr = [1, 2, &#123;username:&#x27;zjl&#x27;&#125;]</span></span><br><span class="line"><span class="keyword">let</span> arr3 = arr.<span class="title function_">slice</span>() <span class="comment">// 拷贝arr</span></span><br><span class="line">arr3[<span class="number">2</span>].<span class="property">username</span> = <span class="string">&#x27;zxy&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr3)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-5-函数库lodash的-clone方法"><a href="#3-5-函数库lodash的-clone方法" class="headerlink" title="3.5 函数库lodash的_.clone方法"></a>3.5 函数库lodash的_.clone方法</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _ = <span class="built_in">require</span>(<span class="string">&#x27;lodash&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> obj1 = &#123;</span><br><span class="line">    <span class="attr">a</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">b</span>: &#123; <span class="attr">f</span>: &#123; <span class="attr">g</span>: <span class="number">1</span> &#125; &#125;,</span><br><span class="line">    <span class="attr">c</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = _.<span class="title function_">clone</span>(obj1);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj1.<span class="property">b</span>.<span class="property">f</span> === obj2.<span class="property">b</span>.<span class="property">f</span>);<span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-如何实现深拷贝"><a href="#4-如何实现深拷贝" class="headerlink" title="4. 如何实现深拷贝"></a>4. 如何实现深拷贝</h3><h4 id="4-1-JSON-parse-JSON-stringify"><a href="#4-1-JSON-parse-JSON-stringify" class="headerlink" title="4.1 JSON.parse(JSON.stringify())"></a>4.1 JSON.parse(JSON.stringify())</h4><p>此方法虽然简单，但要注意它的缺陷，了解哪些数据类型不适合这种方法进行深拷贝；</p>
+<p><strong>缺陷</strong>:</p>
+<ol>
+<li>拷贝对象的值中如果有 函数, <code>undefined</code> , <code>Symbol</code> ,<br><code>JSON.stringify</code> 序列化后, 键值对丢失</li>
+<li>拷贝RegExp会变成空对象 {}</li>
+<li>对象中含有 ‘NaN’, ‘Infinity’ 会变成null</li>
+<li>拷贝Date会变成字符串</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JSON.stringify() 将对象转换为JSON格式的字符串</span></span><br><span class="line"><span class="comment">// JSON.parse() 将JSON格式的字符串转为对象</span></span><br><span class="line"><span class="comment">// 实现深拷贝</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;zjl&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span>,</span><br><span class="line">  <span class="attr">hobby</span>: [<span class="string">&#x27;dance&#x27;</span>, <span class="string">&#x27;music&#x27;</span>],</span><br><span class="line">  <span class="attr">book</span>: &#123;</span><br><span class="line">    <span class="attr">book_name</span>: <span class="string">&#x27;Golang&#x27;</span>,</span><br><span class="line">    <span class="attr">price</span>: <span class="number">66</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">test1</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;,</span><br><span class="line">  <span class="attr">test2</span>: <span class="literal">undefined</span>,</span><br><span class="line">  <span class="attr">test3</span>: <span class="title class_">Symbol</span>(<span class="string">&#x27;id&#x27;</span>),</span><br><span class="line">  <span class="attr">test4</span>: <span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="regexp">/a/</span>, <span class="string">&#x27;g&#x27;</span>),</span><br><span class="line">  <span class="attr">test5</span>: <span class="title class_">NaN</span>,</span><br><span class="line">  <span class="attr">test6</span>: <span class="title class_">Infinity</span>,</span><br><span class="line">  <span class="attr">test7</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(),</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 深拷贝</span></span><br><span class="line"><span class="keyword">const</span> o = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(obj))</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj)</span><br><span class="line"><span class="comment">// 缺陷:</span></span><br><span class="line"><span class="comment">//    1. 拷贝对象的值中如果有`函数`,`undefined`, `Symbol`,</span></span><br><span class="line"><span class="comment">//    JSON.stringify序列化后, 键值对丢失</span></span><br><span class="line"><span class="comment">//    2.  拷贝RegExp会变成空对象 &#123;&#125;</span></span><br><span class="line"><span class="comment">//    3.  对象中含有 &#x27;NaN&#x27;, &#x27;Infinity&#x27; 会变成null</span></span><br><span class="line"><span class="comment">//    4.  拷贝Date会变成字符串</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-2-手写递归"><a href="#4-2-手写递归" class="headerlink" title="4.2 手写递归"></a>4.2 手写递归</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;zjl&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span>,</span><br><span class="line">  <span class="attr">hobyy</span>:[<span class="string">&#x27;dance&#x27;</span>,<span class="string">&#x27;music&#x27;</span>],</span><br><span class="line">  <span class="attr">book</span>:&#123;</span><br><span class="line">     <span class="attr">book_name</span>:<span class="string">&#x27;Golang&#x27;</span>,</span><br><span class="line">     <span class="attr">price</span>:<span class="number">66</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">deepClone</span> = (<span class="params">newObj, oldObj</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> k <span class="keyword">in</span> oldObj) &#123;</span><br><span class="line">        <span class="comment">// k 属性名  oldObj[k] 属性值</span></span><br><span class="line">        <span class="keyword">if</span> (oldObj[k] <span class="keyword">instanceof</span> <span class="title class_">Array</span>) &#123;</span><br><span class="line">            newObj[k] = []  <span class="comment">// obj.hobby = [], 创建了一个新对象</span></span><br><span class="line"></span><br><span class="line">            <span class="title function_">deepClone</span>(newObj[k], oldObj[k])</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (oldObj[k] <span class="keyword">instanceof</span> <span class="title class_">Object</span>)&#123;</span><br><span class="line">            newObj[k] = &#123;&#125;</span><br><span class="line">            <span class="title function_">deepCopy</span>(newObj[k], oldObj[k])</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 不是数组， 执行 else</span></span><br><span class="line">            newObj[k] = oldObj[k]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>考虑 Date、RegExp类型， 直接生成一个新的实例返回</li>
+<li>考虑数组 <code>let target = Array.isArray(obj)? [] : &#123;&#125;</code></li>
+<li>考虑循环引用 利用WeakMap作为hash表， 检测到对象已存在于哈希表中，取出该值返回即可</li>
+<li>针对不可枚举属性以及 Symbol 类型，使用 Reflect.ownKeys()</li>
+<li>函数部分太复杂，函数的原型，多层柯里化等</li>
+<li>针对Map, Set, Error等，Object.getOwnPropertyDescriptors(obj) 也不考虑</li>
+<li>递归爆栈问题，改用循环解决，广度优先</li>
+</ul>
+<p><strong>手写递归完整版</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这一版， 大家以后 想跳槽大厂... 阿里腾讯随便进</span></span><br><span class="line"><span class="comment">// 检测对象 </span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">isObject</span> = (<span class="params">obj</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> obj === <span class="string">&#x27;object&#x27;</span> &amp;&amp; obj != <span class="literal">null</span>  <span class="comment">// !!obj</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">deepClone</span> = (<span class="params">obj, hash = <span class="keyword">new</span> <span class="built_in">WeakMap</span>()</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 值类型 直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isObject</span>(obj)) <span class="keyword">return</span> obj</span><br><span class="line">  <span class="comment">// Date, RegExp  constructor容易被修改丢失，被认为不安全，不推荐作为判断</span></span><br><span class="line">  <span class="comment">// instanceof好一些</span></span><br><span class="line"><span class="comment">//  if (obj.constructor === Date) return new Date(obj)</span></span><br><span class="line"><span class="comment">//  if (obj.constructor === RegExp) return new RegExp(obj)</span></span><br><span class="line">    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="title class_">Date</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Date</span>(obj)</span><br><span class="line">    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="title class_">RegExp</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RegExp</span>(obj)</span><br><span class="line">  <span class="comment">// 解决循环引用，查哈希表</span></span><br><span class="line">  <span class="keyword">if</span> (hash.<span class="title function_">has</span>(obj)) <span class="keyword">return</span> hash.<span class="title function_">get</span>(obj)</span><br><span class="line"><span class="comment">//     let allDesc = Object.getOwnPropertyDescriptors(obj)</span></span><br><span class="line"><span class="comment">//     let target = Object.create(Object.getPrototypeOf(obj),allDesc)</span></span><br><span class="line">  <span class="keyword">let</span> target = <span class="title class_">Array</span>.<span class="title function_">isArray</span>(obj) ? [] : &#123;&#125; <span class="comment">// 考虑数组</span></span><br><span class="line">  hash.<span class="title function_">set</span>(obj, target)</span><br><span class="line">  </span><br><span class="line">  <span class="title class_">Reflect</span>.<span class="title function_">ownKeys</span>(obj).<span class="title function_">forEach</span>(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">isObject</span>(obj[key])) &#123;</span><br><span class="line">      target[key] = <span class="title function_">deepClone</span>(obj[key], hash)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      target[key] = obj[key]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">return</span> target</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-3-函数库lodash的-cloneDeep-方法"><a href="#4-3-函数库lodash的-cloneDeep-方法" class="headerlink" title="4.3 函数库lodash的_.cloneDeep() 方法"></a>4.3 函数库lodash的_.cloneDeep() 方法</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;../04-code/lodash.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">const</span> obj = &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">&#x27;zjl&#x27;</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">age</span>: <span class="number">18</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">hobby</span>: [<span class="string">&#x27;dance&#x27;</span>, <span class="string">&#x27;music&#x27;</span>],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">book</span>: &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">book_name</span>: <span class="string">&#x27;Golang&#x27;</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">price</span>: <span class="number">66</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">const</span> o = _.<span class="title function_">cloneDeep</span>(obj)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="variable language_">console</span>.<span class="title function_">log</span>(o)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  o.<span class="property">hobby</span>[<span class="number">0</span>] = <span class="string">&#x27;sing&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  o.<span class="property">book</span>.<span class="property">price</span> = <span class="number">88</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="variable language_">console</span>.<span class="title function_">log</span>(o)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="variable language_">console</span>.<span class="title function_">log</span>(obj)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Moooodena">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Moooodena
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/08/14/6.%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D/" target="_blank">浅拷贝与深拷贝</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                
+                <div class="article-prev-next">
+                    
+                        <a href="/2022/08/14/7.this%E6%8C%87%E5%90%91/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/08/14/7.this%E6%8C%87%E5%90%91/" title="发布于 2022-08-14 08:23">this 指向</a>
+                        <br>
+                    
+                    
+                        <a href="/2022/08/14/5.%E6%A3%80%E6%B5%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%96%B9%E5%BC%8F/" class="next-prefix">» </a> 下一篇：    <a href="/2022/08/14/5.%E6%A3%80%E6%B5%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%96%B9%E5%BC%8F/" title="发布于 2022-08-14 07:17">检测数据类型的方式</a>
+                    
+                </div>
+            </div>
+            
+    <div class="article-comments">
+        
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+
+        </div>
+    
+</div>
+    <div id="footer"></div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        
+            <div class="menu-notice">
+                <span class="iconfont icon-notice"></span>
+                <div class="notice">
+                    <span>简单地活着，肆意而又精彩！</span>
+                </div>
+            </div>
+        
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar">
+                    <img src="/image/sidebar/avatar.jpg">
+                </div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user"><span>Moooodena</span></div>
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul>
+                    
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                    
+                        <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
+                    
+                        <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
+                    
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                    
+                        <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
+                    
+                        <li class=""><a href="/about" class="" target="_self"><span class="iconfont icon-about-fill"></span>关于</a></li>
+                    
+                        <li class=""><a href="/atom.xml" class="" target="_blank"><span class="iconfont icon-rss"></span>订阅</a></li>
+                    
+                        <li class=""><a href="javascript:;" class="search" target="_self"><span class="iconfont icon-search-menu"></span>搜索</a></li>
+                    
+                        <li class=""><a href="/comment" class="" target="_self"><span class="iconfont icon-comments-fill"></span>留言板</a></li>
+                    
+                        <li class=""><a href="/friend" class="" target="_self"><span class="iconfont icon-link"></span>友情链接</a></li>
+                    
+                </ul> 
+            </div> 
+            <div class="menu-link">
+                <div class="box">
+                    <div class="image-box"></div>
+                </div>
+                
+                    <a name="知乎" href="" class="" target="_blank" data=""><span class="iconfont icon-zhihu"></span></a>
+                
+                    <a name="微博" href="" class="" target="_blank" data=""><span class="iconfont icon-weibo"></span></a>
+                
+                    <a name="QQ" href="javascript:;" class="image" target="_self" data="/image/sidebar/qq.png"><span class="iconfont icon-qq"></span></a>
+                
+                    <a name="微信" href="javascript:;" class="image" target="_self" data="/image/sidebar/Wechat.png"><span class="iconfont icon-wechat"></span></a>
+                
+                    <a name="GitHub" href="https://github.com/Moooodena" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                
+            </div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="/css/search.css">
+<script type="text/javascript" src="/js/iscroll.js"></script>
+<script type="text/javascript" src="/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+
+    
+        <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
+        <script type="text/javascript" src="/js/APlayer.min.js"></script>
+        <script type="text/javascript" src="/js/Meting.min.js"></script>
+        <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+    
+    
+    <div class="wrap-right">
+        <div class="setting">
+            <div class="iconbox favorites" switch="false">
+                <span class="iconfont icon-favorites"></span>
+                <span class="icontext">关注</span>
+            </div>
+            <div class="iconbox mode">
+                <div class="light">
+                    <span class="iconfont icon-daymode"></span>
+                    <span class="icontext">浅色模式</span>
+                </div>
+                <div class="dark">
+                    <span class="iconfont icon-nightmode-fill"></span>
+                    <span class="icontext">深色模式</span>
+                </div>
+            </div>
+            <a href="javascript:;" target="_self" class="search">
+                <div class="iconbox">
+                    <span class="iconfont icon-search-menu"></span>
+                    <span class="icontext">搜索</span>
+                </div>
+            </a>
+            <div class="iconbox bottom">
+                <div style="display: inline-block; transform: rotate(180deg);">
+                    <span class="iconfont icon-top"></span>
+                </div>
+                <span class="icontext">跳至底部</span>
+            </div>
+        </div>
+        <div class="iconbox set">
+            <div style="display: inline-block;">
+                <span class="iconfont icon-setting"></span>
+            </div>
+            <span class="icontext">设置</span>
+        </div>
+        <div class="iconbox top">
+            <span class="iconfont icon-top"></span>
+            <span class="icontext">返回顶部</span>
+        </div>
+    </div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : "Modena",
+        GitHubRepositories : "Hexo-LiveForCode",
+
+        User             : "Moooodena",
+        UserAvatar       : "/image/sidebar/avatar.jpg",
+        WebsiteStartDate : "2022-08-10",
+
+        WebsiteTitleBlur         : "Moooodena的blog",
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : "(*´∇｀*) 欢迎回来!",
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : "/image/website/logo.png",
+
+        ProgressBar : {
+            id       : "topProgressBar",
+            color    : "#77B6FF",
+            height   : "2px",
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound : {
+                tension  : 16,
+                friction : 5
+            },
+            spinner : {
+                id     : "spinner",
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : "#F0F0F0",
+                    stroke     : "#272633",
+                    base       : "",
+                    child      : "#272633"
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : "rgba(255, 255, 255, .2)",
+            clearOffset : 0.3
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : "60%",
+            colorBrightness  : "50%",
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : "random",
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                "/image/header/home.jpg",
+            
+                "/image/header/home.jpeg",
+            
+        ],
+        HomeBannerText  : "",
+
+        ArticleHeaderImage : [
+            
+                "/image/header/article.jpg",
+            
+        ],
+
+        OtherBannerText : "",
+
+        Error : {
+            icon    : "icon-swimming",
+            title   : "PAGE NOT FOUND",
+            content : [
+                
+                    "很抱歉，您访问的页面不存在！",
+                
+                    "可能是输入地址有误或该地址已变更。",
+                
+            ],
+            buttons : [
+                
+                    {
+                        icon  : "icon-home",
+                        text  : "返回首页",
+                        href  : "/",
+                        class : ""
+                    },
+                
+            ]
+        },
+
+        MenuNotice : {
+            enable : true,
+            notice : "简单地活着，肆意而又精彩！",
+            speed  : 20
+        },
+        MenuList : [
+            
+                {
+                    name   : "首页",
+                    icon   : "icon-home-fill",
+                    href   : "/",
+                    type   : "index",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "分类",
+                    icon   : "icon-folder-fill",
+                    href   : "/category",
+                    type   : "category",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "标签",
+                    icon   : "icon-discount-fill",
+                    href   : "/tag",
+                    type   : "tag",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "归档",
+                    icon   : "icon-calendar-fill",
+                    href   : "/archive",
+                    type   : "archive",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "赞赏",
+                    icon   : "icon-heart-fill",
+                    href   : "/donate",
+                    type   : "donate",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "关于",
+                    icon   : "icon-about-fill",
+                    href   : "/about",
+                    type   : "about",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "订阅",
+                    icon   : "icon-rss",
+                    href   : "/atom.xml",
+                    type   : "",
+                    class  : "",
+                    target : "_blank"
+                },
+            
+                {
+                    name   : "搜索",
+                    icon   : "icon-search-menu",
+                    href   : "javascript:;",
+                    type   : "",
+                    class  : "search",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "留言板",
+                    icon   : "icon-comments-fill",
+                    href   : "/comment",
+                    type   : "comment",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "友情链接",
+                    icon   : "icon-link",
+                    href   : "/friend",
+                    type   : "friend",
+                    class  : "",
+                    target : "_self"
+                },
+            
+        ],
+        MenuLink : [
+            
+                
+                    {
+                        name   : "知乎",
+                        icon   : "icon-zhihu",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "微博",
+                        icon   : "icon-weibo",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "QQ",
+                        icon   : "icon-qq",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/qq.png"
+                    },
+                
+                    {
+                        name   : "微信",
+                        icon   : "icon-wechat",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/Wechat.png"
+                    },
+                
+                    {
+                        name   : "GitHub",
+                        icon   : "icon-github",
+                        href   : "https://github.com/Moooodena",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : "<div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2022 Modena. All Rights Reserved.</div>",
+
+        ConsoleList : [
+            
+                
+                    [
+                        
+                            
+                                "Based on cnblogs theme SimpleMemory.",
+                            
+                                "",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "SimpleMemory Author:",
+                            
+                                "BNDong",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "Theme:",
+                            
+                                "LiveForCode",
+                            
+                        
+                    ],
+                
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : "",
+            bitcoin : "",
+            alipay  : "/image/donate/alipay.png",
+            wechat  : "/image/donate/wechat.png"
+        },
+
+        Search : {
+            applicationID : "010C3EANT8",
+            apiKey        : "c7abab9f11b79102b9aff7fe6d41447d",
+            indexName     : "Notes",
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : "搜索",
+                empty       : "未发现与 「${query}」 相关的内容",
+                stats       : "${hits} 条相关条目，使用了 ${time} 毫秒",
+            }
+        }, 
+
+        Valine : {
+            switch         : true,
+            el             : ".comments-content",
+            appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
+            appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
+            serverURLs     : "",
+            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            avatar         : "mm",
+            meta           : "nick,mail,link",
+            requiredFields : "nick,mail",
+            pageSize       : 5,
+            lang           : "zh-cn",
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : ".toc",
+            contentSelector       : ".article-body",
+            headingSelector       : "h1, h2, h3, h4, h5",
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : ".toc",
+            positionFixedClass    : "toc-fixed",
+            fixedSidebarOffset    : "",
+        },
+
+        Require : {
+            baseUrl     : "/js/",
+            waitSeconds : 100
+        },
+
+        Music : {
+            type : "Meting"
+        },
+        APlayer : {
+            container : ".aplayer",
+            fixed     : true,
+            autoplay  : false,
+            loop      : "all",
+            order     : "random",
+            preload   : "auto",
+            volume    : 0.67,
+            mutex     : true,
+            lrcType   : 3,
+            audio     : [
+                
+                    {
+                        name   : "Endless Tears",
+                        artist : "CLIFF EDGE",
+                        cover  : "/music/cover/Endless Tears.jpg",
+                        url    : "/music/song/Endless Tears.mp3",
+                        lrc    : "/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        },
+        Meting : {
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        Mouse : {
+            enable  : true,
+            options : {
+                size  : 6,
+                sizeF : 24
+            }
+        },
+
+        LazyLoad : {
+            default : "/image/website/lazyload.svg"
+        },
+  
+        Style : {
+            aplayer          : "/css/APlayer.css",
+            archive          : "/css/archive.css",
+            base             : "/css/base.css",
+            clipboard        : "/css/clipboard.css",
+            code             : "/css/code.css",
+            donate           : "/css/donate.css",
+            fancybox         : "/css/jquery.fancybox.css",
+            footer           : "/css/footer.css",
+            iconfont         : "/iconfont/iconfont.css",
+            index            : "/css/index.css",
+            menuBubble       : "/css/menu-bubble.css",
+            mouse            : "/css/mouse.css",
+            page             : "/css/page.css",
+            post             : "/css/post.css",
+            search           : "/css/search.css",
+            tocbot           : "/css/tocbot.css",
+            valine           : "/css/valine.css"
+        },
+
+        Script: {
+            aplayer          : "/js/APlayer.min.js",
+            config           : "/js/require.config.js",
+            index            : "/js/index.js",
+            instantSearch    : "/js/instantsearch.min.js",
+            iscroll          : "/js/iscroll.js",
+            jQuery           : "/js/jquery-3.4.1.min.js",
+            loading          : "/js/loading.js",
+            meting           : "/js/Meting.min.js",
+            require          : "/js/require.min.js"
+        },
+
+        Font: {
+            LongCang    : "/font/LongCang.css",
+            Monda       : "/font/Monda.css",
+            NotoSansSC  : "/font/NotoSansSC.css",
+            NotoSerifSC : "/font/NotoSerifSC.css",
+            Playball    : "/font/Playball.css",
+            PTMono      : "/font/PTMono.css",
+            Roboto      : "/font/Roboto.css",
+            RobotoSlab  : "/font/RobotoSlab.css",
+            Rosario     : "/font/Rosario.css",
+            UbuntuMono  : "/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : "简单地活着, 肆意又精彩."
+        },
+            
+        Theme : {
+            url  : "https://github.com/first19326/Hexo-LiveForCode",
+            name : "Hexo - Live For Code"
+        }  
+    };
+</script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>

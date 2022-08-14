@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            Hexo
+            检测数据类型的方式
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -31,208 +31,139 @@
 <meta name="generator" content="Hexo 6.2.0"></head>
 <body>
     <a id="cover"></a>
-    <link type="text/css" rel="stylesheet" href="/css/index.css">
-<div id="count"></div>
-<div id="header" >
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-title">Moooodena</h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
+                <h1 class="header-subtitle">检测数据类型的方式</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2022-08-14
+                        </span>
+                        
+                            <span id="/2022/08/14/5.检测数据类型方式/" class="leancloud_visitors" data-flag-title="检测数据类型的方式">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/14/5.检测数据类型方式/"></span>
+                        </span>  
+                    </p>
+                    
+                    
+                </div>
             
         </div>
     </div>
     
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
-    
 </div>
 <div id="container">
     
-        
-            <!-- 首页 -->
-            <div class="articles">
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h2 id="检测数据类型的方式"><a href="#检测数据类型的方式" class="headerlink" title="检测数据类型的方式"></a>检测数据类型的方式</h2><h3 id="1-typeof"><a href="#1-typeof" class="headerlink" title="1. typeof"></a>1. typeof</h3><p><code>typeof</code> 可以判断一个变量是否为 除了<code>null</code>以外的基本类型（简单类型、原始类型、值类型）；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="number">1</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="literal">true</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="literal">undefined</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="literal">null</span>) <span class="comment">// object---有点儿特殊 Bug</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="title class_">Symbol</span>(<span class="string">&#x27;id&#x27;</span>))</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="number">9007199254740999n</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="title class_">BigInt</span>(<span class="number">9007199254740999</span>))</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>typeof</code>  总是返回一个字符串</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> (<span class="keyword">typeof</span> <span class="number">1</span>)) <span class="comment">// string</span></span><br></pre></td></tr></table></figure>
+
+<p><code>typeof</code> 检测引用类型，除了<code>function</code>，其余都返回<code>Object</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]) <span class="comment">// object</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;) <span class="comment">// function</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> &#123;&#125;) <span class="comment">// object</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-instanceof"><a href="#2-instanceof" class="headerlink" title="2.  instanceof"></a>2.  instanceof</h3><p>用于引用类型的检测，但<strong>对基本数据类型无效</strong>；用于检测构造函数的 <code>prototype</code> 属性是<strong>否出现在某个实例对象的原型链上</strong>，即检测<strong>实例对象是不是构造函数创建的,或者是否属于某个祖先构造函数</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本类型 无效</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;1&#x27;</span> <span class="keyword">instanceof</span> <span class="title class_">String</span>) <span class="comment">// false</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span> <span class="keyword">instanceof</span> <span class="title class_">Number</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> <span class="keyword">instanceof</span> <span class="title class_">Boolean</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="title class_">Symbol</span>(<span class="string">&#x27;id&#x27;</span>) <span class="keyword">instanceof</span> <span class="title class_">Symbol</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="number">9007199254740999n</span> <span class="keyword">instanceof</span> <span class="title class_">BigInt</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> <span class="title class_">BigInt</span>(<span class="number">9007199254740999</span>) <span class="keyword">instanceof</span> <span class="title class_">BigInt</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//   引用类型</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>([] <span class="keyword">instanceof</span> <span class="title class_">Array</span>) <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;&#125; <span class="keyword">instanceof</span> <span class="title class_">Function</span>) <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(&#123;&#125; <span class="keyword">instanceof</span> <span class="title class_">Object</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-Object-prototype-toString-call"><a href="#3-Object-prototype-toString-call" class="headerlink" title="3. Object.prototype.toString.call()"></a>3. Object.prototype.toString.call()</h3><p><code>Object.prototype.toString.call()</code> 使用 Object 对象的原型方法 toString 来判断数据类型：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> num = <span class="number">123</span></span><br><span class="line"><span class="keyword">let</span> str = <span class="string">&#x27;123&#x27;</span></span><br><span class="line"><span class="keyword">let</span> bool = <span class="literal">true</span></span><br><span class="line"><span class="keyword">let</span> und = <span class="literal">undefined</span></span><br><span class="line"><span class="keyword">let</span> nul = <span class="literal">null</span></span><br><span class="line"><span class="keyword">let</span> symb = <span class="title class_">Symbol</span>(<span class="string">&#x27;id&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> big = <span class="number">9007199254740999n</span></span><br><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> obj = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> fn = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> date = <span class="keyword">new</span> <span class="title class_">Date</span>() <span class="comment">// [object Date]</span></span><br><span class="line"><span class="keyword">let</span> reg = <span class="regexp">/a/g</span> <span class="comment">// [object RegExp]</span></span><br><span class="line"><span class="keyword">let</span> error = <span class="keyword">new</span> <span class="title class_">Error</span>() <span class="comment">// [object Error]</span></span><br><span class="line"><span class="comment">// 前面的object小写, 后面的类型, 大写开头; 字符串</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(num)) <span class="comment">// [object Number]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(str)) <span class="comment">// [object String]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(bool)) <span class="comment">// [object Boolean]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(und)) <span class="comment">// [object Undefined]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(nul)) <span class="comment">// [object Null]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(symb)) <span class="comment">// [object Symbol]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(big)) <span class="comment">// [object BigInt]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(arr)) <span class="comment">// [object Array]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(obj)) <span class="comment">// [object Object]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(fn)) <span class="comment">// [object Function]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(date)) <span class="comment">// [object Date]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(reg)) <span class="comment">// [object RegExp]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(error)) <span class="comment">// [object Error]</span></span><br></pre></td></tr></table></figure>
+
+<p>如果一次需要检测多个数据类型，可以封装一个函数checkType：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> tempArr = [num, str, bool, und, nul, symb, big, arr, obj, fn, date, reg, error]</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">checkType</span> = (<span class="params">arr</span>) =&gt; &#123;</span><br><span class="line">    arr.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(item))</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">checkType</span>(tempArr)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-检测数组"><a href="#4-检测数组" class="headerlink" title="4.检测数组"></a>4.检测数组</h3><ul>
+<li><code>instanceof</code></li>
+<li><code>Object.prototype.toString.call()</code></li>
+<li><code>Array.isArray()</code>  &#x2F;&#x2F; 静态方法  ，返回<code>true</code> &#x2F; <code>false</code></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(arr)) <span class="comment">// [object Array]</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Array</span>.<span class="title function_">isArray</span>(arr)) <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Array</span>.<span class="title function_">isArray</span>(obj)) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/14/7.this%E6%8C%87%E5%90%91/">this 指向</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-14
-                            </span>
-                            
-                                <span id="/2022/08/14/7.this指向/" class="leancloud_visitors" data-flag-title="this 指向">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/14/7.this指向/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Moooodena">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Moooodena
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/08/14/5.%E6%A3%80%E6%B5%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%96%B9%E5%BC%8F/" target="_blank">检测数据类型的方式</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
                 
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/14/6.%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D/">浅拷贝与深拷贝</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-14
-                            </span>
-                            
-                                <span id="/2022/08/14/6.浅拷贝与深拷贝/" class="leancloud_visitors" data-flag-title="浅拷贝与深拷贝">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/14/6.浅拷贝与深拷贝/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
                 
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/14/5.%E6%A3%80%E6%B5%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%96%B9%E5%BC%8F/">检测数据类型的方式</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-14
-                            </span>
-                            
-                                <span id="/2022/08/14/5.检测数据类型方式/" class="leancloud_visitors" data-flag-title="检测数据类型的方式">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/14/5.检测数据类型方式/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/13/4.%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%EF%BC%88%E5%BE%85%E8%A1%A5%E5%85%85%EF%BC%89/">解构赋值</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-13
-                            </span>
-                            
-                                <span id="/2022/08/13/4.解构赋值（待补充）/" class="leancloud_visitors" data-flag-title="解构赋值">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/13/4.解构赋值（待补充）/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/13/3.%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9B%B8%E5%85%B3/">函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-13
-                            </span>
-                            
-                                <span id="/2022/08/13/3.函数作用域相关/" class="leancloud_visitors" data-flag-title="函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/13/3.函数作用域相关/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/11/2.%E5%8E%9F%E5%9E%8B%E9%93%BE/">原型链相关</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-11
-                            </span>
-                            
-                                <span id="/2022/08/11/2.原型链/" class="leancloud_visitors" data-flag-title="原型链相关">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/11/2.原型链/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/10/1.%E5%89%8D%E7%AB%AF%E6%89%8B%E5%86%99%E5%AE%9E%E7%8E%B0/">前端手写实现</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-10
-                            </span>
-                            
-                                <span id="/2022/08/10/1.前端手写实现/" class="leancloud_visitors" data-flag-title="前端手写实现">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/10/1.前端手写实现/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
+                <div class="article-prev-next">
+                    
+                        <a href="/2022/08/14/6.%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/08/14/6.%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D/" title="发布于 2022-08-14 07:40">浅拷贝与深拷贝</a>
+                        <br>
+                    
+                    
+                        <a href="/2022/08/13/4.%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%EF%BC%88%E5%BE%85%E8%A1%A5%E5%85%85%EF%BC%89/" class="next-prefix">» </a> 下一篇：    <a href="/2022/08/13/4.%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%EF%BC%88%E5%BE%85%E8%A1%A5%E5%85%85%EF%BC%89/" title="发布于 2022-08-13 02:46">解构赋值</a>
+                    
+                </div>
             </div>
             
+    <div class="article-comments">
         
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+
+        </div>
     
 </div>
     <div id="footer"></div>
@@ -258,7 +189,7 @@
             <div class="menu-list">
                 <ul>
                     
-                        <li class=" active "><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
                     
                         <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
                     
