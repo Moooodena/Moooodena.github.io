@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            归档
+            防抖和节流
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -31,15 +31,28 @@
 <meta name="generator" content="Hexo 6.2.0"></head>
 <body>
     <a id="cover"></a>
-    <link type="text/css" rel="stylesheet" href="/css/archive.css">
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
 <div id="header" class="header">
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle">归档</h1>
+                <h1 class="header-subtitle">防抖和节流</h1>
                 <div class="header-subinfo">
-                    <p class="article-info-text Chinese"></p>
-                    <p class="article-info-text English"></p>                  
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2022-08-15
+                        </span>
+                        
+                            <span id="/2022/08/15/8.防抖和节流/" class="leancloud_visitors" data-flag-title="防抖和节流">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/15/8.防抖和节流/"></span>
+                        </span>  
+                    </p>
+                    
+                    
                 </div>
             
         </div>
@@ -48,107 +61,80 @@
 </div>
 <div id="container">
     
-        
-            <!-- 归档页面、分类归档页面、标签归档页面 -->
-            <div class="articles">
-                <div class="articles-wrap">
-                    <span class="archive-move-on"></span>
-                    <span class="archive-counter">
-                        
-                            目前共计 8 篇日志，继续加油！
-                        
-                    </span>
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h3 id="防抖-debounce"><a href="#防抖-debounce" class="headerlink" title="防抖 debounce"></a>防抖 debounce</h3><blockquote>
+<p>事件响应函数在一段时间后才执行,如果这段时间内再次调用,则重新计算。 在一定的时间间隔内,将多次触发变成一次触发</p>
+</blockquote>
+<h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h5><ol>
+<li>限制鼠标连续点击（按钮提交等）</li>
+<li>Scroll事件滚动防抖</li>
+<li>搜索框输入查询</li>
+<li>浏览器窗口缩放，resize事件</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://www.30secondsofcode.org/js/s/debounce 目前看见最简写法，best！</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">debounce</span> = (<span class="params">fn, ms = <span class="number">0</span></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> timeoutId</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">...args</span>) &#123; </span><br><span class="line">    <span class="comment">// function(...args) rest参数 ，将args转为数组</span></span><br><span class="line">    <span class="comment">// 对比数组的扩展运算法 fn.call(obj,...args) 含义不一样, 将args转为参数列表</span></span><br><span class="line">    <span class="built_in">clearTimeout</span>(timerId) <span class="comment">// 每次点击的时候清除上一个定时器，重新计时</span></span><br><span class="line">    timeoutId = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>,args), ms)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="节流-throttle"><a href="#节流-throttle" class="headerlink" title="节流  throttle"></a>节流  throttle</h3><blockquote>
+<p>持续的触发事件,每隔一段时间, 只执行一次 ，减少一段时间的触发频率</p>
+</blockquote>
+<p><strong>应用场景</strong></p>
+<ol>
+<li>浏览器窗口缩放  resize事件</li>
+<li>scroll滚动事件, mousemove事件</li>
+</ol>
+<h4 id="时间戳版本"><a href="#时间戳版本" class="headerlink" title="时间戳版本"></a>时间戳版本</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">throttle</span> = (<span class="params">fn, wait</span>) =&gt; &#123;</span><br><span class="line">  	<span class="keyword">let</span> pre = <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="comment">// Date.now || + new Date() || new Date().getTime() || new Date().valueOf()</span></span><br><span class="line">      <span class="keyword">let</span> now = <span class="title class_">Date</span>.<span class="title function_">now</span>()</span><br><span class="line">      <span class="keyword">if</span> (now - pre &gt; = wait) &#123;</span><br><span class="line">        <span class="comment">// apply第二个参数可以是数组，也可以是类数组对象</span></span><br><span class="line">        <span class="comment">// 所以写arguments没有问题！</span></span><br><span class="line">        fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>,<span class="variable language_">arguments</span>)</span><br><span class="line">        pre = <span class="title class_">Date</span>.<span class="title function_">now</span>() <span class="comment">// 将当前时间记录， 作为下一个计时起点</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="定时器版本"><a href="#定时器版本" class="headerlink" title="定时器版本"></a>定时器版本</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">throttle</span> = (<span class="params">fn, wait</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> timerId </span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!timerId) &#123;</span><br><span class="line">      <span class="comment">// 这里箭头函数，this本身指向上层</span></span><br><span class="line">      timerId = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>)</span><br><span class="line">        timerId = <span class="literal">null</span></span><br><span class="line">      &#125;, wait)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//冴羽 https://github.com/mqyqingfeng/Blog/issues/26</span></span><br></pre></td></tr></table></figure>
+
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Moooodena">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Moooodena
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/08/15/8.%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/" target="_blank">防抖和节流</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                
+                <div class="article-prev-next">
                     
                     
-                        
-                            <div class="archive-title">
-                                <h2 class="archive-year">2022</h2>
-                            </div>
-                            
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/15/8.%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/"><span>防抖和节流</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-15</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/14/7.this%E6%8C%87%E5%90%91/"><span>this 指向</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-14</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/14/6.%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D/"><span>浅拷贝与深拷贝</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-14</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/14/5.%E6%A3%80%E6%B5%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%96%B9%E5%BC%8F/"><span>检测数据类型的方式</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-14</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/13/4.%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%EF%BC%88%E5%BE%85%E8%A1%A5%E5%85%85%EF%BC%89/"><span>解构赋值</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-13</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/13/3.%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9B%B8%E5%85%B3/"><span>函数作用域相关（作用域、垃圾回收机制、闭包、变量提升、函数参数和箭头函数）</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-13</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/11/2.%E5%8E%9F%E5%9E%8B%E9%93%BE/"><span>原型链相关</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-11</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2022/08/10/1.%E5%89%8D%E7%AB%AF%E6%89%8B%E5%86%99%E5%AE%9E%E7%8E%B0/"><span>前端手写实现</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">08-10</span>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="/2022/08/14/7.this%E6%8C%87%E5%90%91/" class="next-prefix">» </a> 下一篇：    <a href="/2022/08/14/7.this%E6%8C%87%E5%90%91/" title="发布于 2022-08-14 08:23">this 指向</a>
                     
                 </div>
             </div>
             
+    <div class="article-comments">
         
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+
+        </div>
     
 </div>
     <div id="footer"></div>
@@ -180,7 +166,7 @@
                     
                         <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
                     
-                        <li class=" active "><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
                     
                         <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
                     
