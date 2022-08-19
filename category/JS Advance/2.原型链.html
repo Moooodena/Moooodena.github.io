@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>
+        
+            原型链相关
+        
+    </title>
+    <link rel="shortcut icon" href="#"/>
+
+    <link type="text/css" rel="stylesheet" href="/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSerifSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="/font/Roboto.css">
+    <link type="text/css" rel="stylesheet" href="/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="/css/base.css">
+    <link type="text/css" rel="stylesheet" href="/css/code.css">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+<body>
+    <a id="cover"></a>
+    <link type="text/css" rel="stylesheet" href="/css/page.css">
+<div id="header" class="header">
+    <div class="vertical">
+        <div class="inner">
+            
+                <h1 class="header-subtitle">原型链相关</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text Chinese"></p>
+                    <p class="article-info-text English"></p>                  
+                </div>
+            
+        </div>
+    </div>
+    
+</div>
+<div id="container">
+    
+        <!-- 独立页面 -->
+        
+            <div id="article">
+                <div class="article-body">
+                    
+                    <h2 id="原型链相关"><a href="#原型链相关" class="headerlink" title="原型链相关"></a>原型链相关</h2><h3 id="1-引入原型对象"><a href="#1-引入原型对象" class="headerlink" title="1.引入原型对象"></a>1.引入原型对象</h3><h4 id="1-1构造函数实例化存在的问题"><a href="#1-1构造函数实例化存在的问题" class="headerlink" title="1.1构造函数实例化存在的问题"></a>1.1构造函数实例化存在的问题</h4><p>在构造函数中，存在浪费内存的问题，在每一次实例化构造函数（该构造函数里有方法），就会在堆里单独创造一片空间存放该方法，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">age</span> = age</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">sing</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> ldh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;刘德华&#x27;</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">const</span> zjl = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;周杰伦&#x27;</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">const</span> zxy = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;张学友&#x27;</span>, <span class="number">18</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ldh.<span class="property">sing</span> === zxy.<span class="property">sing</span>) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>该构造函数在实例化过程中，数据存放如图所示：</p>
+<img src="/imgs/$%7Bfiilename%7D/%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E9%97%AE%E9%A2%98.png" style="zoom:67%;" />
+
+<p>在每一次实例化的过程中，都会在堆中开辟一个单独的空间来储存方法，其方法路径也存放在相应的实例化对象中。如果需要实例化的对象比较多，需要开辟空间来储存方法的数目也较多，浪费内存。</p>
+<h4 id="1-2-引入原型对象的概念"><a href="#1-2-引入原型对象的概念" class="headerlink" title="1.2 引入原型对象的概念"></a>1.2 引入原型对象的概念</h4><p>如果把构造函数里的方法单独拿出来，放在原型对象中，那么在实例化过程中，就不用再单独开辟空间来储存这个方法了，节省了内存。为了更好地理解为什么能够在原型对象中能够访问到方法，我们需要知道相应的原型规则。</p>
+<img src="/imgs/$%7Bfiilename%7D/%E5%BC%95%E5%85%A5%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1.png" style="zoom:67%;" />
+
+<h4 id="1-3-原型规则"><a href="#1-3-原型规则" class="headerlink" title="1.3 原型规则"></a>1.3 原型规则</h4><ol>
+<li>所有的引用类型（数组，对象，函数），都具有对象的属性，并且可以自由扩展属性；</li>
+<li>所有的对象都有 <code>__proto__</code> （或者 <code>[[prototype]]</code>）属性，称为隐式原型，属性值是一个普通对象；</li>
+<li>所有的函数都有 <code>prototype</code>  属性，称为显式原型，属性值也是一个普通的对象；</li>
+<li>所有对象的隐式原型 <code>__proto__</code> 都指向其构造函数的显式原型<code>prototype</code></li>
+<li>当试图得到对象的某个属性时，而这个对象没有该属性，那么就会通过其<code>__proto__</code>隐式原型去原型对象中寻找；</li>
+</ol>
+<h4 id="1-4原型对象-（通过函数的prototype属性指向）"><a href="#1-4原型对象-（通过函数的prototype属性指向）" class="headerlink" title="1.4原型对象 （通过函数的prototype属性指向）"></a>1.4原型对象 （通过函数的prototype属性指向）</h4><p>在JS中，原型对象也称为原型，它本质就是一个对象。字面意思就是原始的模型，原始祖先。</p>
+<p><strong>概念</strong>：</p>
+<p>1.所有的函数，都有一个<code>prototype</code>属性（显式原型），这个属性是一个指针，指向了原型对象；</p>
+<p>2.原型对象默认有一个叫做<code>constructor</code>的属性，该属性指向了这个构造函数本身；</p>
+<p>3.我们可以往这个原型对象上添加属性和方法；</p>
+<p>所以所有听过构造函数创建的实例，都共享原型对象上包含的属性和方法；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Person</span>(<span class="params"></span>) &#123;&#125;</span><br><span class="line"><span class="comment">//   dir : 查看对象的所有属性和方法</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">dir</span>(<span class="title class_">Person</span>)</span><br></pre></td></tr></table></figure>
+
+<img src="/imgs/$%7Bfiilename%7D/image-20220811191105673.png" style="zoom:67%;" />
+
+<p>举例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">age</span> = age</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//   给对象原型添加方法</span></span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sing</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//   给对象原型添加属性</span></span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">cheer</span> = <span class="string">&#x27;加油&#x27;</span></span><br><span class="line"><span class="keyword">const</span> ldh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;刘德华&#x27;</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">const</span> zxy = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;张学友&#x27;</span>, <span class="number">18</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ldh)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ldh.<span class="property">__proto__</span> === <span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>) <span class="comment">// 他们都指向原型对象</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-5-构造函数和原型方法中-this-的指向"><a href="#1-5-构造函数和原型方法中-this-的指向" class="headerlink" title="1.5 构造函数和原型方法中 this 的指向"></a>1.5 构造函数和原型方法中 this 的指向</h4><p>我们知道，在进行构造函数实例化的过程中，<code>new</code>的执行机制分为以下四步：</p>
+<ol>
+<li>在构造函数内部创建一个空对象；</li>
+<li>让<code>this</code>指向这个空对象；</li>
+<li>执行构造函数里面的代码，给这个空对象添加相应的属性和方法（引入原型对象后构造函数里尽量没有方法）</li>
+<li>返回<code>this</code></li>
+</ol>
+<p>在构造函数实例化后，其内部的this会被清空，很难判断this的具体指向，所以我们在实例化前，声明一个全局变量<code>that</code>来接收<code>this</code>，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> that <span class="comment">// 全局变量</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">  <span class="comment">// that = this</span></span><br><span class="line">  <span class="comment">// console.log(this)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sing</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">  that = <span class="variable language_">this</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> ldh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;刘德华&#x27;</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(that === ldh) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>执行以上代码，我们可以知道：</p>
+<ol>
+<li>构造函数里的<code>this</code>，指向的是实例（对象）；</li>
+<li>原型对象方法里的<code>this</code>，指向的是实例（对象）；</li>
+</ol>
+<p>即构造函数里的<code>this</code>和原型对象方法里的<code>this</code>，都<strong>指向我们<code>new</code>出来的实例对象</strong>。</p>
+<h4 id="1-6-constructor-属性"><a href="#1-6-constructor-属性" class="headerlink" title="1.6 constructor 属性"></a>1.6 constructor 属性</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">age</span> = age</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> ldh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;刘德华&#x27;</span>, <span class="number">20</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">dir</span>(<span class="title class_">Star</span>) <span class="comment">// 构造函数</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>) <span class="comment">// 原型</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">constructor</span> === <span class="title class_">Star</span>) <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ldh.<span class="property">__proto__</span> === <span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>) <span class="comment">// true  ===&gt; 都指向原型</span></span><br></pre></td></tr></table></figure>
+
+<p>执行以上代码，在控制台中我们可以看到，其原型对象有一个<code>constructor</code>属性，其指向了这个构造函数。</p>
+<img src="/imgs/$%7Bfiilename%7D/image-20220811192840728.png" style="zoom:67%;" />
+
+<p>该属性表示该原型和哪个构造函数相关联，是哪个构造函数的原型。</p>
+<h5 id="应用"><a href="#应用" class="headerlink" title="应用"></a><strong>应用</strong></h5><p>因为我们前面为了避免构造函数在实例化的过程中浪费内存，将方法添加到原型对象中，但是如果需要添加的方法比较多，一个个添加十分麻烦。</p>
+<p>所以可以将需要添加的方法结合成一个对象，再加到原型中，但是！如果我们直接给原型对象赋值一个对象的话，会整个替换了原型对象，这个时候，原型中的<code>constructor</code>属性消失，我们也就不清楚这个原型是哪一个构造函数的原型。所以，我们可以手动添加一个<code>constructor</code>属性，指回原来的构造函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sing</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">dance</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;跳舞&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>)</span><br><span class="line"></span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span> = &#123;</span><br><span class="line">   <span class="attr">constructur</span>: <span class="title class_">Star</span>, <span class="comment">// 指回原来的构造函数</span></span><br><span class="line">  <span class="attr">dance</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;跳舞&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">sing</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>)</span><br></pre></td></tr></table></figure>
+
+<p>原型的<code>constructor</code>指向相应的构造函数，可以方便批量给构造函数添加相应的方法，只要在添加方法的对象里将<code>constructor</code>指回原来的构造函数即可。</p>
+<h4 id="1-7-通过对象的-proto-属性指向原型"><a href="#1-7-通过对象的-proto-属性指向原型" class="headerlink" title="1.7 通过对象的__proto__属性指向原型"></a>1.7 通过对象的<code>__proto__</code>属性指向原型</h4><p>前面我们了解到可以通过函数的<code>prototype</code>属性可以指向原型对象，但是我们可以从原型规则第四条中可以得知，可以通过实例对象的<code>__proto__</code>属性（隐式原型）指向原型对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">age</span> = age</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sing</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;唱歌&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> ldh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;刘德华&#x27;</span>, <span class="number">18</span>)</span><br><span class="line">ldh.<span class="property">__proto__</span> === <span class="title class_">Star</span>.<span class="property"><span class="keyword">prototype</span></span></span><br></pre></td></tr></table></figure>
+
+<p>每一个对象都默认有一个  <code>__proto__</code> 属性,指向它的构造函数的<code>prototype</code>显式原型；</p>
+<p><code>__proto__</code> 相当于是一个桥梁,链接,实例通过它访问原型对象；</p>
+<p>所以，<strong>方法属性的查找规则</strong>可以为：</p>
+<p>首先看<code>ldh</code> 对象身上本身有没有<code>sing</code>这个方法，如果有，就执行这个对象上的<code>sing</code>方法；</p>
+<p>如果没有，就会通过<code>__proto__</code> 去实例的原型上查找；</p>
+<p>举例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Animal</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">color</span> = <span class="string">&#x27;orange&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> cat = <span class="keyword">new</span> <span class="title class_">Animal</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(cat.<span class="property">__proto__</span> === <span class="title class_">Animal</span>.<span class="property"><span class="keyword">prototype</span></span>) <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(cat.<span class="property">__proto__</span>) <span class="comment">// 得到原型</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Animal</span>.<span class="property"><span class="keyword">prototype</span></span>) <span class="comment">//  得到原型</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Animal</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">constructor</span> === <span class="title class_">Animal</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(cat.<span class="property">__proto__</span>.<span class="property">constructor</span> === <span class="title class_">Animal</span>)</span><br><span class="line"><span class="comment">//   实例.__proto__ === 构造函数.prototype</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-原型链"><a href="#2-原型链" class="headerlink" title="2.原型链"></a>2.原型链</h3><h4 id="2-1构造函数，原型和实例之间的关系"><a href="#2-1构造函数，原型和实例之间的关系" class="headerlink" title="2.1构造函数，原型和实例之间的关系"></a>2.1构造函数，原型和实例之间的关系</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Person</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>()</span><br></pre></td></tr></table></figure>
+
+<p>三者关系如图所示：</p>
+<img src="/imgs/$%7Bfiilename%7D/image-20220811200111597.png" style="zoom:67%;" />
+
+<p>四条线：</p>
+<ol>
+<li>构造函数 有一个<code>prototype</code> 属性，指向原型对象；</li>
+<li>原型对象默认有一个<code>constructor</code>属性，指向构造函数（构造函数和原型 是相互指向）；</li>
+<li>构造函数通过 <code>new</code> 创建一个实例；</li>
+<li>实例通过<code>__proto__</code> 访问到原型；</li>
+</ol>
+<p>实例与构造函数原型之间有直接的联系(<code>__proto__</code>)，但实例与构造函数之间没有；</p>
+<h4 id="2-2-原型链"><a href="#2-2-原型链" class="headerlink" title="2.2 原型链"></a>2.2 原型链</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Person</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>()</span><br></pre></td></tr></table></figure>
+
+<p>1.<code>Person.prototype</code>也是一个对象，所有，他也有<code>__proto__</code>属性  (原型规则2)</p>
+<p>那么<code>Person.prototype</code>的构造函数是谁呢？</p>
+<p><code>Object()</code>    所有的对象,都可以理解为是<code>Object()</code>这个构造函数创建的</p>
+<p>根据原型规则4可以知道：</p>
+<p><code>Person.prototype</code> 的隐式原型  指向 它的构造函数的显式原型</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Person</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">__proto__</span> === <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>)  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>2.<code>Object.prototype</code> 是什么？ 是原型，是谁的原型？ <code>Object()</code>构造函数的原型</p>
+<p> 2.1  <code>Object.prototype</code> 原型，默认有一个<code>constructor</code>属性，指向构造函数<code>Object</code></p>
+<p> 2.2 <code>Object</code>构造函数通过 <code>prototype</code> 访问到这个原型 <code>Object.prototype</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Person</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">__proto__</span> === <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>)  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>以下两个，都指向<code>Object()</code> 这个构造函数的原型</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Person</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">__proto__</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>)</span><br></pre></td></tr></table></figure>
+
+<p>3.Object是构造函数吗？ 是   所以Object也有<code>prototype</code>属性 (原型规则3)</p>
+<p><code>Object.prototype</code> 他是Object的原型对象，所以<code>Object.prototype</code>有<code>__proto__</code>属性 (原型规则2)</p>
+<p>但是 <code>Object.prototype.__proto__</code> 指向 <code>null</code>空！</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">__proto__</span> === <span class="literal">null</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>正常的原型链都会终止于 Object 的原型对象</strong></p>
+<p><strong>Object 原型的 原型 是 <code>null</code></strong></p>
+<p>我们说的原型, 可以说是构造函数的原型, 也可以说是实例的原型</p>
+<p>(<code>Object.prototype</code>) &#x3D;&#x3D;&gt; Object的原型</p>
+<p><code>Object.prototype.__proto__</code> 能访问到它<code>Object.prototype</code>的原型</p>
+<p><code>obj.__proto__  === Object.prototype</code>  obj的原型</p>
+<h4 id="2-3-原型链小结"><a href="#2-3-原型链小结" class="headerlink" title="2.3 原型链小结"></a>2.3 原型链小结</h4><ol>
+<li>每个对象能够通过 <code>__proto__</code> 属性访问到它的原型对象,原型对象也有他的原型对象</li>
+<li>当访问一个对象的属性或方法时,先在自身中寻找</li>
+<li>如果没有,就会沿着 <code>__proto__</code> 这条链向上查找,一直找到最顶层的 <code>Object.prototype</code>为止</li>
+<li><code>object.prototype.__proto__ === null</code></li>
+</ol>
+<p>关系如图所示：</p>
+<img src="/imgs/$%7Bfiilename%7D/image-20220811172826204.png" style="zoom:67%;" />
+
+<p><strong>主要是通过隐形原型<code>__proto__</code>进行查找！</strong></p>
+<h4 id="2-4-数组与函数的原型链"><a href="#2-4-数组与函数的原型链" class="headerlink" title="2.4 数组与函数的原型链"></a>2.4 数组与函数的原型链</h4><h5 id="2-4-1-数组的原型链"><a href="#2-4-1-数组的原型链" class="headerlink" title="2.4.1 数组的原型链"></a>2.4.1 数组的原型链</h5><p><code>const arr = new Array(1, 2, 3, 4)</code></p>
+<p><code>arr --&gt; Array.prototype --&gt; Object.prototype --&gt; null</code></p>
+<h5 id="2-4-2-函数的原型链"><a href="#2-4-2-函数的原型链" class="headerlink" title="2.4.2 函数的原型链"></a>2.4.2 函数的原型链</h5><p><code>fn</code> 相当于是  <code>Function()</code> 创建的</p>
+<p><code>const fn = new Function()</code></p>
+<p><code>fn --&gt; Function.prototype --&gt; Object.prototype --&gt; null</code></p>
+
+                    
+                </div>
+                
+    <div class="article-comments">
+        
+        <div class="comments-content"></div>
+    </div>
+
+            </div>
+        
+    
+</div>
+    <div id="footer"></div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        
+            <div class="menu-notice">
+                <span class="iconfont icon-notice"></span>
+                <div class="notice">
+                    <span>简单地活着，肆意而又精彩！</span>
+                </div>
+            </div>
+        
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar">
+                    <img src="/image/sidebar/avatar.jpg">
+                </div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user"><span>Moooodena</span></div>
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul>
+                    
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                    
+                        <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
+                    
+                        <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
+                    
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                    
+                        <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
+                    
+                        <li class=""><a href="/about" class="" target="_self"><span class="iconfont icon-about-fill"></span>关于</a></li>
+                    
+                        <li class=""><a href="/atom.xml" class="" target="_blank"><span class="iconfont icon-rss"></span>订阅</a></li>
+                    
+                        <li class=""><a href="javascript:;" class="search" target="_self"><span class="iconfont icon-search-menu"></span>搜索</a></li>
+                    
+                        <li class=""><a href="/comment" class="" target="_self"><span class="iconfont icon-comments-fill"></span>留言板</a></li>
+                    
+                        <li class=""><a href="/friend" class="" target="_self"><span class="iconfont icon-link"></span>友情链接</a></li>
+                    
+                </ul> 
+            </div> 
+            <div class="menu-link">
+                <div class="box">
+                    <div class="image-box"></div>
+                </div>
+                
+                    <a name="知乎" href="" class="" target="_blank" data=""><span class="iconfont icon-zhihu"></span></a>
+                
+                    <a name="微博" href="" class="" target="_blank" data=""><span class="iconfont icon-weibo"></span></a>
+                
+                    <a name="QQ" href="javascript:;" class="image" target="_self" data="/image/sidebar/qq.png"><span class="iconfont icon-qq"></span></a>
+                
+                    <a name="微信" href="javascript:;" class="image" target="_self" data="/image/sidebar/Wechat.png"><span class="iconfont icon-wechat"></span></a>
+                
+                    <a name="GitHub" href="https://github.com/Moooodena" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                
+            </div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="/css/search.css">
+<script type="text/javascript" src="/js/iscroll.js"></script>
+<script type="text/javascript" src="/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+
+    
+        <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
+        <script type="text/javascript" src="/js/APlayer.min.js"></script>
+        <script type="text/javascript" src="/js/Meting.min.js"></script>
+        <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+    
+    
+    <div class="wrap-right">
+        <div class="setting">
+            <div class="iconbox favorites" switch="false">
+                <span class="iconfont icon-favorites"></span>
+                <span class="icontext">关注</span>
+            </div>
+            <div class="iconbox mode">
+                <div class="light">
+                    <span class="iconfont icon-daymode"></span>
+                    <span class="icontext">浅色模式</span>
+                </div>
+                <div class="dark">
+                    <span class="iconfont icon-nightmode-fill"></span>
+                    <span class="icontext">深色模式</span>
+                </div>
+            </div>
+            <a href="javascript:;" target="_self" class="search">
+                <div class="iconbox">
+                    <span class="iconfont icon-search-menu"></span>
+                    <span class="icontext">搜索</span>
+                </div>
+            </a>
+            <div class="iconbox bottom">
+                <div style="display: inline-block; transform: rotate(180deg);">
+                    <span class="iconfont icon-top"></span>
+                </div>
+                <span class="icontext">跳至底部</span>
+            </div>
+        </div>
+        <div class="iconbox set">
+            <div style="display: inline-block;">
+                <span class="iconfont icon-setting"></span>
+            </div>
+            <span class="icontext">设置</span>
+        </div>
+        <div class="iconbox top">
+            <span class="iconfont icon-top"></span>
+            <span class="icontext">返回顶部</span>
+        </div>
+    </div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : "Modena",
+        GitHubRepositories : "Hexo-LiveForCode",
+
+        User             : "Moooodena",
+        UserAvatar       : "/image/sidebar/avatar.jpg",
+        WebsiteStartDate : "2022-08-10",
+
+        WebsiteTitleBlur         : "Moooodena的blog",
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : "(*´∇｀*) 欢迎回来!",
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : "/image/website/logo.png",
+
+        ProgressBar : {
+            id       : "topProgressBar",
+            color    : "#77B6FF",
+            height   : "2px",
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound : {
+                tension  : 16,
+                friction : 5
+            },
+            spinner : {
+                id     : "spinner",
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : "#F0F0F0",
+                    stroke     : "#272633",
+                    base       : "",
+                    child      : "#272633"
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : "rgba(255, 255, 255, .2)",
+            clearOffset : 0.3
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : "60%",
+            colorBrightness  : "50%",
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : "random",
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                "/image/header/home.jpg",
+            
+                "/image/header/home.jpeg",
+            
+        ],
+        HomeBannerText  : "",
+
+        ArticleHeaderImage : [
+            
+                "/image/header/article.jpg",
+            
+        ],
+
+        OtherBannerText : "",
+
+        Error : {
+            icon    : "icon-swimming",
+            title   : "PAGE NOT FOUND",
+            content : [
+                
+                    "很抱歉，您访问的页面不存在！",
+                
+                    "可能是输入地址有误或该地址已变更。",
+                
+            ],
+            buttons : [
+                
+                    {
+                        icon  : "icon-home",
+                        text  : "返回首页",
+                        href  : "/",
+                        class : ""
+                    },
+                
+            ]
+        },
+
+        MenuNotice : {
+            enable : true,
+            notice : "简单地活着，肆意而又精彩！",
+            speed  : 20
+        },
+        MenuList : [
+            
+                {
+                    name   : "首页",
+                    icon   : "icon-home-fill",
+                    href   : "/",
+                    type   : "index",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "分类",
+                    icon   : "icon-folder-fill",
+                    href   : "/category",
+                    type   : "category",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "标签",
+                    icon   : "icon-discount-fill",
+                    href   : "/tag",
+                    type   : "tag",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "归档",
+                    icon   : "icon-calendar-fill",
+                    href   : "/archive",
+                    type   : "archive",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "赞赏",
+                    icon   : "icon-heart-fill",
+                    href   : "/donate",
+                    type   : "donate",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "关于",
+                    icon   : "icon-about-fill",
+                    href   : "/about",
+                    type   : "about",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "订阅",
+                    icon   : "icon-rss",
+                    href   : "/atom.xml",
+                    type   : "",
+                    class  : "",
+                    target : "_blank"
+                },
+            
+                {
+                    name   : "搜索",
+                    icon   : "icon-search-menu",
+                    href   : "javascript:;",
+                    type   : "",
+                    class  : "search",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "留言板",
+                    icon   : "icon-comments-fill",
+                    href   : "/comment",
+                    type   : "comment",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "友情链接",
+                    icon   : "icon-link",
+                    href   : "/friend",
+                    type   : "friend",
+                    class  : "",
+                    target : "_self"
+                },
+            
+        ],
+        MenuLink : [
+            
+                
+                    {
+                        name   : "知乎",
+                        icon   : "icon-zhihu",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "微博",
+                        icon   : "icon-weibo",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "QQ",
+                        icon   : "icon-qq",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/qq.png"
+                    },
+                
+                    {
+                        name   : "微信",
+                        icon   : "icon-wechat",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/Wechat.png"
+                    },
+                
+                    {
+                        name   : "GitHub",
+                        icon   : "icon-github",
+                        href   : "https://github.com/Moooodena",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : "<div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2022 Modena. All Rights Reserved.</div>",
+
+        ConsoleList : [
+            
+                
+                    [
+                        
+                            
+                                "Based on cnblogs theme SimpleMemory.",
+                            
+                                "",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "SimpleMemory Author:",
+                            
+                                "BNDong",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "Theme:",
+                            
+                                "LiveForCode",
+                            
+                        
+                    ],
+                
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : "",
+            bitcoin : "",
+            alipay  : "/image/donate/alipay.png",
+            wechat  : "/image/donate/wechat.png"
+        },
+
+        Search : {
+            applicationID : "010C3EANT8",
+            apiKey        : "c7abab9f11b79102b9aff7fe6d41447d",
+            indexName     : "Notes",
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : "搜索",
+                empty       : "未发现与 「${query}」 相关的内容",
+                stats       : "${hits} 条相关条目，使用了 ${time} 毫秒",
+            }
+        }, 
+
+        Valine : {
+            switch         : true,
+            el             : ".comments-content",
+            appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
+            appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
+            serverURLs     : "",
+            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            avatar         : "mm",
+            meta           : "nick,mail,link",
+            requiredFields : "nick,mail",
+            pageSize       : 5,
+            lang           : "zh-cn",
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : ".toc",
+            contentSelector       : ".article-body",
+            headingSelector       : "h1, h2, h3, h4, h5",
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : ".toc",
+            positionFixedClass    : "toc-fixed",
+            fixedSidebarOffset    : "",
+        },
+
+        Require : {
+            baseUrl     : "/js/",
+            waitSeconds : 100
+        },
+
+        Music : {
+            type : "Meting"
+        },
+        APlayer : {
+            container : ".aplayer",
+            fixed     : true,
+            autoplay  : false,
+            loop      : "all",
+            order     : "random",
+            preload   : "auto",
+            volume    : 0.67,
+            mutex     : true,
+            lrcType   : 3,
+            audio     : [
+                
+                    {
+                        name   : "Endless Tears",
+                        artist : "CLIFF EDGE",
+                        cover  : "/music/cover/Endless Tears.jpg",
+                        url    : "/music/song/Endless Tears.mp3",
+                        lrc    : "/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        },
+        Meting : {
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        Mouse : {
+            enable  : true,
+            options : {
+                size  : 6,
+                sizeF : 24
+            }
+        },
+
+        LazyLoad : {
+            default : "/image/website/lazyload.svg"
+        },
+  
+        Style : {
+            aplayer          : "/css/APlayer.css",
+            archive          : "/css/archive.css",
+            base             : "/css/base.css",
+            clipboard        : "/css/clipboard.css",
+            code             : "/css/code.css",
+            donate           : "/css/donate.css",
+            fancybox         : "/css/jquery.fancybox.css",
+            footer           : "/css/footer.css",
+            iconfont         : "/iconfont/iconfont.css",
+            index            : "/css/index.css",
+            menuBubble       : "/css/menu-bubble.css",
+            mouse            : "/css/mouse.css",
+            page             : "/css/page.css",
+            post             : "/css/post.css",
+            search           : "/css/search.css",
+            tocbot           : "/css/tocbot.css",
+            valine           : "/css/valine.css"
+        },
+
+        Script: {
+            aplayer          : "/js/APlayer.min.js",
+            config           : "/js/require.config.js",
+            index            : "/js/index.js",
+            instantSearch    : "/js/instantsearch.min.js",
+            iscroll          : "/js/iscroll.js",
+            jQuery           : "/js/jquery-3.4.1.min.js",
+            loading          : "/js/loading.js",
+            meting           : "/js/Meting.min.js",
+            require          : "/js/require.min.js"
+        },
+
+        Font: {
+            LongCang    : "/font/LongCang.css",
+            Monda       : "/font/Monda.css",
+            NotoSansSC  : "/font/NotoSansSC.css",
+            NotoSerifSC : "/font/NotoSerifSC.css",
+            Playball    : "/font/Playball.css",
+            PTMono      : "/font/PTMono.css",
+            Roboto      : "/font/Roboto.css",
+            RobotoSlab  : "/font/RobotoSlab.css",
+            Rosario     : "/font/Rosario.css",
+            UbuntuMono  : "/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : "简单地活着, 肆意又精彩."
+        },
+            
+        Theme : {
+            url  : "https://github.com/first19326/Hexo-LiveForCode",
+            name : "Hexo - Live For Code"
+        }  
+    };
+</script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>
