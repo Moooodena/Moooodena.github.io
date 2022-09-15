@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>
+        
+            Vue基础（持续更新）
+        
+    </title>
+    <link rel="shortcut icon" href="#"/>
+
+    <link type="text/css" rel="stylesheet" href="/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSerifSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="/font/Roboto.css">
+    <link type="text/css" rel="stylesheet" href="/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="/css/base.css">
+    <link type="text/css" rel="stylesheet" href="/css/code.css">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+<body>
+    <a id="cover"></a>
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
+    <div class="vertical">
+        <div class="inner">
+            
+                <h1 class="header-subtitle">Vue基础（持续更新）</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2022-09-15
+                        </span>
+                        
+                            <span id="/2022/09/15/Vue/" class="leancloud_visitors" data-flag-title="Vue基础（持续更新）">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/09/15/Vue/"></span>
+                        </span>  
+                    </p>
+                    
+                    
+                </div>
+            
+        </div>
+    </div>
+    
+</div>
+<div id="container">
+    
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h1 id="Vue基础（持续更新）"><a href="#Vue基础（持续更新）" class="headerlink" title="Vue基础（持续更新）"></a>Vue基础（持续更新）</h1><blockquote>
+<p>本文介绍Vue的基本语法</p>
+</blockquote>
+<p><strong>(各个标题层级会在后期修改)</strong></p>
+<p><strong>如何在App.vue中引入组件</strong>？</p>
+<ol>
+<li><p>通过import ‘引入’ 组件，并为组件起一个自定义名称；</p>
+</li>
+<li><p>通过components 属性进行组件 ‘注册’ ；</p>
+</li>
+<li><p>在 template 标签内，以’标签形式’进行使用；</p>
+</li>
+</ol>
+<img src="/../%E5%9C%A8App.vue%E4%B8%AD%E5%BC%95%E5%85%A5%E7%BB%84%E4%BB%B6.png" style="zoom:50%;" />
+
+<p>在<code>&lt;style&gt;&lt;/style&gt;</code>中可以设置组件样式，并为了保证设置样式只作用于当前的文件，会设置一个<code>scoped</code>属性；</p>
+<p><strong>对于main.js</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// 项目js入口文件</span><br><span class="line">import Vue from &#x27;vue&#x27; //引入vue源码</span><br><span class="line">import App from &#x27;./App.vue&#x27; // 引入项目根组件</span><br><span class="line"></span><br><span class="line">Vue.config.productionTip = false // 一个控制台的打印提示</span><br><span class="line"></span><br><span class="line">/* </span><br><span class="line">  1. 全局取消eslint监测 =&gt; vue.config.js 中设置属性lintOnSave: false</span><br><span class="line">  2. 局部屏蔽eslint监测</span><br><span class="line">    2.1 对下一行代码进行屏蔽 =&gt; // eslint-disable-next-line</span><br><span class="line">    2.2 对当前行代码进行屏蔽 =&gt; // eslint-disable-line</span><br><span class="line">    2.3 多行代码都需要屏蔽时</span><br><span class="line">      2.3.1 关闭监测 eslint-disable</span><br><span class="line">      2.3.2 开启监测 eslint-enable</span><br><span class="line">*/</span><br><span class="line">/* 为什么将做好的一个干净的项目压缩后反复使用？除了使用创建代码比较耗时外还有什么理由？</span><br><span class="line">答：在实际工作中，往往一个洁净的项目结构中有非常多使用基本脚手架创建出来的项目不具有的部分，</span><br><span class="line">为了保证每次使用时这些不具有的配置能够保持一致(例如有10个项目，希望在初始化阶段保持完成一致) ；</span><br><span class="line">实际场景：在公司如果有一个全新的项目需要开发，那么公司的架构师会提供一个完整的项目结构，我们只需要解压，通过npm i 安装这个项目的依赖项即可使用*/</span><br><span class="line">new Vue(&#123;</span><br><span class="line">  // 实例化Vue对象(传入配置对象)</span><br><span class="line">  render: (h) =&gt; h(App), //render渲染：告诉vue需要渲染什么东西(渲染根组件)</span><br><span class="line">&#125;).$mount(&#x27;#app&#x27;) // 渲染到哪里 =&gt; 将根组件中的内容，替换index.html中id为app的标签</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-插值表达式（声明式渲染）-插入的某个值"><a href="#1-插值表达式（声明式渲染）-插入的某个值" class="headerlink" title="1. 插值表达式（声明式渲染） - 插入的某个值"></a>1. 插值表达式（声明式渲染） - 插入的某个值</h3><blockquote>
+<p> 在Vue中通过双花括号的形式来构架插值表达式</p>
+</blockquote>
+<p>语法：<code>&#123;&#123; 表达式(< > >= == === ! && || 三目运算 变量) &#125;&#125;</code></p>
+<p>简单来说，就是在标签里写js代码，插值表达式就是替换了js中的innerText；</p>
+<p>注意：一个vue文件中，<strong>声明的变量需要放置在data函数的return对象上</strong>！！！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;!-- 1.小技巧：通过&lt;vue 来快捷部署页面结构 --&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;!-- 通过双花括号的形式来构架插值表达式</span><br><span class="line">    &#123;&#123; 表达式(&lt; &gt; &gt;= == === ! &amp;&amp; || 三目运算 变量) &#125;&#125;</span><br><span class="line">    简单来说，就是在标签里写js代码</span><br><span class="line">    插值表达式就是替换了js中的innerText --&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; 1 + 1 &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; msg &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; obj.name &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; obj.age &gt;= 18 ? &#x27;成年&#x27;: &#x27;未成年&#x27; &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    // 2. 给每一个vue文件起一个名字(要求：组件的名称一般情况下是全英文且需要多个单词驼峰式命名，</span><br><span class="line">    // 但是在初期学习阶段，起名比较困难，可以随便起一个名字加序号后面接一个 - 来表示名称)</span><br><span class="line">    // 为什么这么做：eslint 代码规范要求我们需要设置多个单词组成词组的文件名称，而短横线可以屏蔽这一判断</span><br><span class="line">    name: &#x27;demo-01&#x27;,</span><br><span class="line"></span><br><span class="line">    // 3. 一个vue文件中，声明的变量需要放置在data函数的return对象上</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            msg: &#x27;插值表达式&#x27;,</span><br><span class="line">            obj: &#123;</span><br><span class="line">                name: &#x27;张三&#x27;,</span><br><span class="line">                age: 18</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-MVVM设计模式（面试必考）"><a href="#2-MVVM设计模式（面试必考）" class="headerlink" title="2. MVVM设计模式（面试必考）"></a>2. MVVM设计模式（面试必考）</h3><p>设计模式: 是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结。</p>
+<ul>
+<li>MVVM，一种软件架构模式，决定了写代码的思想和层次<ul>
+<li>M：   model数据模型          (data里定义)	</li>
+<li>V：    view视图                   （html页面）</li>
+<li>VM： ViewModel视图模型  (vue.js源码)</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>MVVM通过<strong>数据双向绑定</strong>让数据自动地双向同步  <strong>不再需要操作DOM</strong><ul>
+<li>V（修改视图） -&gt; M（数据自动同步）</li>
+<li>M（修改数据） -&gt; V（视图自动同步）</li>
+</ul>
+</li>
+</ul>
+<p>所以！在vue中，不需要再去操作Dom了，而是<strong>通过操作数据来实现驱动视图</strong>。</p>
+<p><strong>面试题：简单描述一下vue的设计模式</strong></p>
+<p>答：vue使用的mvvm设计模式。<strong>MVVM</strong>是<code>Model-View-ViewModel</code>缩写，也就是把<code>MVC</code>中的<code>Controller</code>演变成<code>ViewModel</code>。</p>
+<p><code>Model</code>层代表数据模型，<code>View</code>代表UI组件，<code>ViewModel</code>是<code>View</code>和<code>Model</code>层的桥梁，</p>
+<p>数据会绑定到<code>viewModel</code>层并自动将数据渲染到页面中，视图变化的时候会通知<code>viewModel</code>层更新数据 (数据双向绑定)。</p>
+<h3 id="3-v-bind-动态属性"><a href="#3-v-bind-动态属性" class="headerlink" title="3. v-bind - 动态属性"></a>3. v-bind - 动态属性</h3><blockquote>
+<p>给标签属性设置vue变量的值</p>
+</blockquote>
+<ul>
+<li>语法：<code>v-bind:属性名=&quot;vue变量 (写在 data 的return 返回对象中)&quot;</code></li>
+<li>简写：<code>:属性名=&quot;vue变量&quot;</code></li>
+</ul>
+<p>关于动态属性的特例： 在使用动态属性渲染图片时，不可以直接将变量的值设置为路径；</p>
+<p>原因： v-bind 会把这个路径认为是字符串</p>
+<p>解决方案： </p>
+<ol>
+<li><p>通过 import 的方式引入图片并且赋值给data中的变量；</p>
+</li>
+<li><p>通过 require 的方式引入图片并赋值给data中的变量；</p>
+</li>
+</ol>
+<p>以上两种解决方案，你觉得哪一个更好呢？？<strong>（面试考点：如何进行代码优化！！！）</strong></p>
+<p>答： <strong>require 的引入方式更为友好</strong>。 当一个vue文件被使用时，那么既然是js代码，那么遵循从上往下依次执行，</p>
+<p><strong>import中引入的图片就会在页面渲染初期被加载，而require引入的图片，只有在使用的时候才会被加载，初次开启页面会显得更加的高效</strong>；</p>
+<p>注意！！！<strong>属性值要写在 data 的return 返回对象中</strong>！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;!-- \v-bind动态属性</span><br><span class="line">    语法： </span><br><span class="line">    v-bind:属性名 = &#x27;属性值&#x27;</span><br><span class="line">    简写：:属性名 = &#x27;属性值&#x27; --&gt;</span><br><span class="line">    &lt;a v-bind:href=&quot;url&quot;&gt;百度&lt;/a&gt;&lt;br&gt;</span><br><span class="line">    &lt;a :href=&quot;url&quot;&gt;baidu&lt;/a&gt;</span><br><span class="line">    &lt;br&gt;</span><br><span class="line">    &lt;img src=&quot;../assets/Snipaste_2022-09-15_15-41-02.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;</span><br><span class="line">    &lt;img :src=&quot;url2&quot; alt=&quot;&quot;&gt;&lt;br&gt;</span><br><span class="line">    &lt;img :src=&quot;url3&quot; alt=&quot;&quot;&gt;&lt;br&gt;</span><br><span class="line">    &lt;img :src=&quot;url4&quot; alt=&quot;&quot;&gt;&lt;br&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    import image from &#x27;../assets/Snipaste_2022-09-15_15-41-02.png&#x27;</span><br><span class="line">export default &#123;</span><br><span class="line">    name: &#x27;demo-02&#x27;,</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            url: &#x27;http://baidu.com&#x27;,</span><br><span class="line">            url2: &#x27;../assets/Snipaste_2022-09-15_15-41-02.png&#x27;,</span><br><span class="line">            url3: image,</span><br><span class="line">            url4: require(&#x27;../assets/Snipaste_2022-09-15_15-41-02.png&#x27;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-v-on-事件绑定"><a href="#4-v-on-事件绑定" class="headerlink" title="4. v-on 事件绑定"></a>4. v-on 事件绑定</h3><blockquote>
+<p> v-on 绑定事件 替换的是 webapi 中的.onclick, .addEventListener ；</p>
+</blockquote>
+<h4 id="4-1-v-on-事件绑定基本使用"><a href="#4-1-v-on-事件绑定基本使用" class="headerlink" title="4.1 v-on 事件绑定基本使用"></a>4.1 v-on 事件绑定基本使用</h4><p><strong>语法</strong>: v-on:事件名&#x3D;”少量代码”</p>
+<p>​           v-on:事件名&#x3D;”methods里函数名”</p>
+<p>​     	  v-on:事件名&#x3D;”methods里函数名(值)”</p>
+<pre><code>       @事件名=&quot;methods里函数名&quot;
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;div&gt;当前数字count: &#123;&#123; count &#125;&#125;&lt;/div&gt;</span><br><span class="line">        &lt;button v-on:click=&quot;count++&quot;&gt;点击后count+1&lt;/button&gt;</span><br><span class="line">        &lt;button v-on:click=&quot;addFn&quot;&gt;点击后count+2&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/template&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;script&gt;</span><br><span class="line">  export default &#123;</span><br><span class="line">    name: &#x27;demo-03&#x27;,</span><br><span class="line">    //   页面中要用的变量</span><br><span class="line">      data() &#123;</span><br><span class="line">          return &#123;</span><br><span class="line">           count:1</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    //   methods 里定义这个vue文件中所需要使用的方法</span><br><span class="line">    methods: &#123;</span><br><span class="line">        // 触发后count 加 2</span><br><span class="line">        addFn(event) &#123;</span><br><span class="line">            // this 代表 export default&#123;&#125; 对象，data和methods里的属性都挂载在这个对象上</span><br><span class="line">            this.count += 2</span><br><span class="line">            console.log(event)</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;style&gt;</span><br><span class="line">  &lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意<code>export default&#123; &#125;</code>里的<code>this</code>，它指的是<code>export default&#123; &#125;</code>这个对象，<code>data</code>和<code>methods</code>里的属性都挂载在这个对象上；</p>
+<h4 id="4-2-v-on的事件对象-—event"><a href="#4-2-v-on的事件对象-—event" class="headerlink" title="4.2 v-on的事件对象 —event"></a>4.2 v-on的事件对象 —event</h4><p> v-on 获取事件对象   <strong>event</strong> </p>
+<ol>
+<li><p>无参数获取事件对象  我们的事件对象**<code>event</code>默认在第一个形参上**；</p>
+</li>
+<li><p>有参数(特指带小括号的方法)，这个小括号会覆盖event默认参数，我们可以用<code>$event</code>的实际参数来代替这个事件对象；</p>
+</li>
+<li><p>一般情况下，我们都将事件对象event 放到整个形式参数的最后一位；</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">     &lt;!-- v-on 绑定事件 替换的是 webapi 中的.onclick, .addEventListener --&gt;</span><br><span class="line">    &lt;!-- 1. v-on绑定事件</span><br><span class="line">      语法: v-on:事件名=&quot;少量代码&quot;</span><br><span class="line">      语法: v-on:事件名=&quot;methods里函数名&quot;</span><br><span class="line">      语法: v-on:事件名=&quot;methods里函数名(值)&quot;</span><br><span class="line">      语法: @事件名=&quot;methods里函数名&quot;</span><br><span class="line">    --&gt;</span><br><span class="line">        &lt;!-- v-on 获取事件对象  - event </span><br><span class="line">        1. 无参数获取事件对象  我们的事件对象event默认在第一个形参上</span><br><span class="line">        2. 有参数(特指带小括号的方法)，这个小括号会覆盖event默认参数，我们可以用$event的实际参数来代替这个事件对象--&gt;</span><br><span class="line">        &lt;!-- 注意事项： 一般情况下，我们都将事件对象event 放到整个形式参数的最后一位 --&gt;</span><br><span class="line">        &lt;button v-on:click=&quot;addFn&quot;&gt;点击后count+2 (获取事件对象版本) &lt;/button&gt;</span><br><span class="line">        &lt;button @click=&quot;addFn2(3, $event)&quot;&gt;点击后count+3 (获取事件对象版本) &lt;/button&gt;&lt;br&gt;</span><br><span class="line">        &lt;a href=&quot;http://baidu.com&quot; @click=&quot;go&quot;&gt;百度&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/template&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;script&gt;</span><br><span class="line">     </span><br><span class="line">  export default &#123;</span><br><span class="line">    name: &#x27;demo-03&#x27;,</span><br><span class="line">    //   页面中要用的变量</span><br><span class="line">      data() &#123;</span><br><span class="line">          return &#123;</span><br><span class="line">           count:1</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    //   methods 里定义这个vue文件中所需要使用的方法</span><br><span class="line">    methods: &#123;</span><br><span class="line">        // 触发后count 加 2</span><br><span class="line">        addFn(event) &#123;</span><br><span class="line">            // this 代表 export default&#123;&#125; 对象，data和methods里的属性都挂载在这个对象上</span><br><span class="line">            this.count += 2</span><br><span class="line">            console.log(event)</span><br><span class="line">        &#125;,</span><br><span class="line">        // 触发后count添加点击按钮传过来的实参</span><br><span class="line">        addFn2(num,event) &#123;</span><br><span class="line">            this.count += num</span><br><span class="line">            console.log(event)</span><br><span class="line">        &#125;,</span><br><span class="line">        // a标签的点击事件</span><br><span class="line">        go(event) &#123;</span><br><span class="line">            event.preventDefault()</span><br><span class="line">            console.log(&#x27;希望阻止a标签跳转&#x27;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;style&gt;</span><br><span class="line">  &lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-3-v-on-修饰符"><a href="#4-3-v-on-修饰符" class="headerlink" title="4.3 v-on 修饰符"></a>4.3 v-on 修饰符</h4><blockquote>
+<p>修饰符就是为了简化代码！</p>
+</blockquote>
+<p><strong>语法</strong>： @事件名.修饰符&#x3D;”methods里函数”</p>
+<p>​           .stop - 阻止事件冒泡</p>
+<p>​           .prevent - 阻止默认行为</p>
+<p>​           .once - 程序运行期间, 只触发一次事件处理函数 </p>
+<p> 问题：如果我把修饰符全忘了，影响我开发吗？</p>
+<p> 答：并不影响，因为修饰符只是在简化我们对事件对象的操作，并不影响事件对象本身；</p>
+<p> 问题：修饰符与修饰符之间能不能混合使用？</p>
+<p> 答：可以混合使用，只需要在第一个修饰符后面通过点语法的形式连接后续修饰符即可；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">     &lt;!-- @事件名.修饰符=&quot;methods里函数&quot;</span><br><span class="line">     - .stop - 阻止事件冒泡</span><br><span class="line">     - .prevent - 阻止默认行为</span><br><span class="line">     - .once - 程序运行期间, 只触发一次事件处理函数 </span><br><span class="line"> </span><br><span class="line">    &lt;div @click=&quot;fatherFn&quot;&gt;</span><br><span class="line">        &lt;p @click.stop=&quot;stopFn&quot;&gt;点击后希望阻止冒泡&lt;/p&gt;</span><br><span class="line">        &lt;a href=&quot;http://baidu.com&quot; @click.prevent.stop&gt;跳转百度&lt;/a&gt;</span><br><span class="line">        &lt;p @click.once=&quot;clickCount&quot;&gt;观察这个点击事件执行了几次&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/template&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;script&gt;</span><br><span class="line">  export default &#123;</span><br><span class="line">    name: &#x27;demo-04&#x27;,</span><br><span class="line">    //   页面中要用的变量</span><br><span class="line">      data() &#123;</span><br><span class="line">          return &#123;</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    //   methods 里定义这个vue文件中所需要使用的方法</span><br><span class="line">    methods: &#123;</span><br><span class="line">        // 父标签的冒泡事件</span><br><span class="line">        fatherFn() &#123;</span><br><span class="line">            console.log(&#x27;冒泡事件触发了&#x27;)</span><br><span class="line">        &#125;,</span><br><span class="line">        stopFn() &#123;</span><br><span class="line">            console.log(&#x27;子元素组件触发&#x27;)</span><br><span class="line">        &#125;,</span><br><span class="line">        // 观察该方法触发的次数</span><br><span class="line">        clickCount() &#123;</span><br><span class="line">            console.log(&#x27;once触发了&#x27;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;style&gt;</span><br><span class="line">  &lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Moooodena">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Moooodena
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/09/15/Vue/" target="_blank">Vue基础（持续更新）</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                
+                <div class="article-prev-next">
+                    
+                    
+                        <a href="/2022/08/20/12.Web%20API/" class="next-prefix">» </a> 下一篇：    <a href="/2022/08/20/12.Web%20API/" title="发布于 2022-08-20 07:30">Web API</a>
+                    
+                </div>
+            </div>
+            
+    <div class="article-comments">
+        
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+
+        </div>
+    
+</div>
+    <div id="footer"></div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        
+            <div class="menu-notice">
+                <span class="iconfont icon-notice"></span>
+                <div class="notice">
+                    <span>简单地活着，肆意而又精彩！</span>
+                </div>
+            </div>
+        
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar">
+                    <img src="/image/sidebar/avatar.jpg">
+                </div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user"><span>Moooodena</span></div>
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul>
+                    
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                    
+                        <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
+                    
+                        <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
+                    
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                    
+                        <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
+                    
+                        <li class=""><a href="/about" class="" target="_self"><span class="iconfont icon-about-fill"></span>关于</a></li>
+                    
+                        <li class=""><a href="/atom.xml" class="" target="_blank"><span class="iconfont icon-rss"></span>订阅</a></li>
+                    
+                        <li class=""><a href="javascript:;" class="search" target="_self"><span class="iconfont icon-search-menu"></span>搜索</a></li>
+                    
+                        <li class=""><a href="/comment" class="" target="_self"><span class="iconfont icon-comments-fill"></span>留言板</a></li>
+                    
+                        <li class=""><a href="/friend" class="" target="_self"><span class="iconfont icon-link"></span>友情链接</a></li>
+                    
+                </ul> 
+            </div> 
+            <div class="menu-link">
+                <div class="box">
+                    <div class="image-box"></div>
+                </div>
+                
+                    <a name="知乎" href="" class="" target="_blank" data=""><span class="iconfont icon-zhihu"></span></a>
+                
+                    <a name="微博" href="" class="" target="_blank" data=""><span class="iconfont icon-weibo"></span></a>
+                
+                    <a name="QQ" href="javascript:;" class="image" target="_self" data="/image/sidebar/qq.png"><span class="iconfont icon-qq"></span></a>
+                
+                    <a name="微信" href="javascript:;" class="image" target="_self" data="/image/sidebar/Wechat.png"><span class="iconfont icon-wechat"></span></a>
+                
+                    <a name="GitHub" href="https://github.com/Moooodena" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                
+            </div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="/css/search.css">
+<script type="text/javascript" src="/js/iscroll.js"></script>
+<script type="text/javascript" src="/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+
+    
+        <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
+        <script type="text/javascript" src="/js/APlayer.min.js"></script>
+        <script type="text/javascript" src="/js/Meting.min.js"></script>
+        <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+    
+    
+    <div class="wrap-right">
+        <div class="setting">
+            <div class="iconbox favorites" switch="false">
+                <span class="iconfont icon-favorites"></span>
+                <span class="icontext">关注</span>
+            </div>
+            <div class="iconbox mode">
+                <div class="light">
+                    <span class="iconfont icon-daymode"></span>
+                    <span class="icontext">浅色模式</span>
+                </div>
+                <div class="dark">
+                    <span class="iconfont icon-nightmode-fill"></span>
+                    <span class="icontext">深色模式</span>
+                </div>
+            </div>
+            <a href="javascript:;" target="_self" class="search">
+                <div class="iconbox">
+                    <span class="iconfont icon-search-menu"></span>
+                    <span class="icontext">搜索</span>
+                </div>
+            </a>
+            <div class="iconbox bottom">
+                <div style="display: inline-block; transform: rotate(180deg);">
+                    <span class="iconfont icon-top"></span>
+                </div>
+                <span class="icontext">跳至底部</span>
+            </div>
+        </div>
+        <div class="iconbox set">
+            <div style="display: inline-block;">
+                <span class="iconfont icon-setting"></span>
+            </div>
+            <span class="icontext">设置</span>
+        </div>
+        <div class="iconbox top">
+            <span class="iconfont icon-top"></span>
+            <span class="icontext">返回顶部</span>
+        </div>
+    </div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : "Modena",
+        GitHubRepositories : "Hexo-LiveForCode",
+
+        User             : "Moooodena",
+        UserAvatar       : "/image/sidebar/avatar.jpg",
+        WebsiteStartDate : "2022-08-10",
+
+        WebsiteTitleBlur         : "Moooodena的blog",
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : "(*´∇｀*) 欢迎回来!",
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : "/image/website/logo.png",
+
+        ProgressBar : {
+            id       : "topProgressBar",
+            color    : "#77B6FF",
+            height   : "2px",
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound : {
+                tension  : 16,
+                friction : 5
+            },
+            spinner : {
+                id     : "spinner",
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : "#F0F0F0",
+                    stroke     : "#272633",
+                    base       : "",
+                    child      : "#272633"
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : "rgba(255, 255, 255, .2)",
+            clearOffset : 0.3
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : "60%",
+            colorBrightness  : "50%",
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : "random",
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                "/image/header/home.jpg",
+            
+                "/image/header/home.jpeg",
+            
+        ],
+        HomeBannerText  : "",
+
+        ArticleHeaderImage : [
+            
+                "/image/header/article.jpg",
+            
+        ],
+
+        OtherBannerText : "",
+
+        Error : {
+            icon    : "icon-swimming",
+            title   : "PAGE NOT FOUND",
+            content : [
+                
+                    "很抱歉，您访问的页面不存在！",
+                
+                    "可能是输入地址有误或该地址已变更。",
+                
+            ],
+            buttons : [
+                
+                    {
+                        icon  : "icon-home",
+                        text  : "返回首页",
+                        href  : "/",
+                        class : ""
+                    },
+                
+            ]
+        },
+
+        MenuNotice : {
+            enable : true,
+            notice : "简单地活着，肆意而又精彩！",
+            speed  : 20
+        },
+        MenuList : [
+            
+                {
+                    name   : "首页",
+                    icon   : "icon-home-fill",
+                    href   : "/",
+                    type   : "index",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "分类",
+                    icon   : "icon-folder-fill",
+                    href   : "/category",
+                    type   : "category",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "标签",
+                    icon   : "icon-discount-fill",
+                    href   : "/tag",
+                    type   : "tag",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "归档",
+                    icon   : "icon-calendar-fill",
+                    href   : "/archive",
+                    type   : "archive",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "赞赏",
+                    icon   : "icon-heart-fill",
+                    href   : "/donate",
+                    type   : "donate",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "关于",
+                    icon   : "icon-about-fill",
+                    href   : "/about",
+                    type   : "about",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "订阅",
+                    icon   : "icon-rss",
+                    href   : "/atom.xml",
+                    type   : "",
+                    class  : "",
+                    target : "_blank"
+                },
+            
+                {
+                    name   : "搜索",
+                    icon   : "icon-search-menu",
+                    href   : "javascript:;",
+                    type   : "",
+                    class  : "search",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "留言板",
+                    icon   : "icon-comments-fill",
+                    href   : "/comment",
+                    type   : "comment",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "友情链接",
+                    icon   : "icon-link",
+                    href   : "/friend",
+                    type   : "friend",
+                    class  : "",
+                    target : "_self"
+                },
+            
+        ],
+        MenuLink : [
+            
+                
+                    {
+                        name   : "知乎",
+                        icon   : "icon-zhihu",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "微博",
+                        icon   : "icon-weibo",
+                        href   : "",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "QQ",
+                        icon   : "icon-qq",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/qq.png"
+                    },
+                
+                    {
+                        name   : "微信",
+                        icon   : "icon-wechat",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/Wechat.png"
+                    },
+                
+                    {
+                        name   : "GitHub",
+                        icon   : "icon-github",
+                        href   : "https://github.com/Moooodena",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : "<div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2022 Modena. All Rights Reserved.</div>",
+
+        ConsoleList : [
+            
+                
+                    [
+                        
+                            
+                                "Based on cnblogs theme SimpleMemory.",
+                            
+                                "",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "SimpleMemory Author:",
+                            
+                                "BNDong",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "Theme:",
+                            
+                                "LiveForCode",
+                            
+                        
+                    ],
+                
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : "",
+            bitcoin : "",
+            alipay  : "/image/donate/alipay.png",
+            wechat  : "/image/donate/wechat.png"
+        },
+
+        Search : {
+            applicationID : "010C3EANT8",
+            apiKey        : "c7abab9f11b79102b9aff7fe6d41447d",
+            indexName     : "Notes",
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : "搜索",
+                empty       : "未发现与 「${query}」 相关的内容",
+                stats       : "${hits} 条相关条目，使用了 ${time} 毫秒",
+            }
+        }, 
+
+        Valine : {
+            switch         : true,
+            el             : ".comments-content",
+            appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
+            appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
+            serverURLs     : "",
+            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            avatar         : "mm",
+            meta           : "nick,mail,link",
+            requiredFields : "nick,mail",
+            pageSize       : 5,
+            lang           : "zh-cn",
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : ".toc",
+            contentSelector       : ".article-body",
+            headingSelector       : "h1, h2, h3, h4, h5",
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : ".toc",
+            positionFixedClass    : "toc-fixed",
+            fixedSidebarOffset    : "",
+        },
+
+        Require : {
+            baseUrl     : "/js/",
+            waitSeconds : 100
+        },
+
+        Music : {
+            type : "Meting"
+        },
+        APlayer : {
+            container : ".aplayer",
+            fixed     : true,
+            autoplay  : false,
+            loop      : "all",
+            order     : "random",
+            preload   : "auto",
+            volume    : 0.67,
+            mutex     : true,
+            lrcType   : 3,
+            audio     : [
+                
+                    {
+                        name   : "Endless Tears",
+                        artist : "CLIFF EDGE",
+                        cover  : "/music/cover/Endless Tears.jpg",
+                        url    : "/music/song/Endless Tears.mp3",
+                        lrc    : "/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        },
+        Meting : {
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        Mouse : {
+            enable  : true,
+            options : {
+                size  : 6,
+                sizeF : 24
+            }
+        },
+
+        LazyLoad : {
+            default : "/image/website/lazyload.svg"
+        },
+  
+        Style : {
+            aplayer          : "/css/APlayer.css",
+            archive          : "/css/archive.css",
+            base             : "/css/base.css",
+            clipboard        : "/css/clipboard.css",
+            code             : "/css/code.css",
+            donate           : "/css/donate.css",
+            fancybox         : "/css/jquery.fancybox.css",
+            footer           : "/css/footer.css",
+            iconfont         : "/iconfont/iconfont.css",
+            index            : "/css/index.css",
+            menuBubble       : "/css/menu-bubble.css",
+            mouse            : "/css/mouse.css",
+            page             : "/css/page.css",
+            post             : "/css/post.css",
+            search           : "/css/search.css",
+            tocbot           : "/css/tocbot.css",
+            valine           : "/css/valine.css"
+        },
+
+        Script: {
+            aplayer          : "/js/APlayer.min.js",
+            config           : "/js/require.config.js",
+            index            : "/js/index.js",
+            instantSearch    : "/js/instantsearch.min.js",
+            iscroll          : "/js/iscroll.js",
+            jQuery           : "/js/jquery-3.4.1.min.js",
+            loading          : "/js/loading.js",
+            meting           : "/js/Meting.min.js",
+            require          : "/js/require.min.js"
+        },
+
+        Font: {
+            LongCang    : "/font/LongCang.css",
+            Monda       : "/font/Monda.css",
+            NotoSansSC  : "/font/NotoSansSC.css",
+            NotoSerifSC : "/font/NotoSerifSC.css",
+            Playball    : "/font/Playball.css",
+            PTMono      : "/font/PTMono.css",
+            Roboto      : "/font/Roboto.css",
+            RobotoSlab  : "/font/RobotoSlab.css",
+            Rosario     : "/font/Rosario.css",
+            UbuntuMono  : "/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : "简单地活着, 肆意又精彩."
+        },
+            
+        Theme : {
+            url  : "https://github.com/first19326/Hexo-LiveForCode",
+            name : "Hexo - Live For Code"
+        }  
+    };
+</script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>
