@@ -514,6 +514,7 @@
 <p>在data中数据发生改变，而在此时无法获取到Dom元素，因为Vue更新Dom是异步的（数据与页面有延时）；</p>
 </blockquote>
 <p>语法：<code>$nextTick(() =&gt; &#123;需要执行的操作&#125;)</code></p>
+<p>当页面dom元素更新后立即执行的回调函数($nextTick可以在数据改变后获取到最新的dom元素)</p>
 <p>写在方法的最后面，this.$nextTick 执行以后不要在后面写任何业务代码；</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;p ref=&quot;myP&quot;&gt;&#123;&#123; count &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;button @click=&quot;btn&quot;&gt;点击加 1&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      count: 0,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    btn() &#123;</span><br><span class="line">      this.count++,</span><br><span class="line">        console.log(&quot;数据中的值&quot;, this.count),</span><br><span class="line">        console.log(&quot;页面中的值&quot;, this.$refs.myP.innerText); // 获取到的数据是旧数据</span><br><span class="line"></span><br><span class="line">      //   方案一： 使用setTimeout 让后面的代码延时执行</span><br><span class="line">      // 异步操作也需要在异步通道中排队，先放入的任务先执行，所以给定时器设置的延时为0，可以解决这一问题</span><br><span class="line">      setTimeout(() =&gt; &#123;</span><br><span class="line">        console.log(&quot;setTimeout延时后的值&quot;, this.$refs.myP.innerText);</span><br><span class="line">      &#125;, 0);</span><br><span class="line"></span><br><span class="line">      // 方案二： 使用vue内置方法$nextTick(() =&gt; &#123;&#125;)</span><br><span class="line">      // 作用： vue提供了一个内置的方法，该方法仅在dom更新后进行触发执行</span><br><span class="line">      // 一般情况下要求所有个代码开发人员将 this.$nextTick 回调函数，写在方法的最后面</span><br><span class="line">      this.$nextTick(() =&gt; &#123;</span><br><span class="line">        console.log(&quot;$nextTick的值&quot;, this.$refs.myP.innerText);</span><br><span class="line">        //   this.$nextTick 执行以后不要再=在后面写任何业务代码</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
@@ -566,7 +567,40 @@
 </ol>
 <p>created&#x2F;mounted &#x3D;&gt; activated</p>
 <p>beforeDestroy &#x3D;&gt; deactivated</p>
-<h4 id="16-4-组件插槽（面试加分）"><a href="#16-4-组件插槽（面试加分）" class="headerlink" title="16.4 组件插槽（面试加分）"></a>16.4 组件插槽（面试加分）</h4><h3 id="17-自定义指令"><a href="#17-自定义指令" class="headerlink" title="17. 自定义指令"></a>17. 自定义指令</h3><blockquote>
+<h4 id="16-4-组件插槽（面试加分）"><a href="#16-4-组件插槽（面试加分）" class="headerlink" title="16.4 组件插槽（面试加分）"></a>16.4 组件插槽（面试加分）</h4><h5 id="组件插槽"><a href="#组件插槽" class="headerlink" title="组件插槽"></a>组件插槽</h5><p>  插槽的基本使用方式:</p>
+<ol>
+<li>子组件中设置slot标签进行插槽的占位</li>
+<li>父组件中的子组件双标签内，设置按相关的插入内容，该内容会设置在子组件的slot标签位置上</li>
+</ol>
+<h5 id="插槽的默认值"><a href="#插槽的默认值" class="headerlink" title="插槽的默认值"></a>插槽的默认值</h5><p>  场景：在有些时候，使用某个组件时，都用共同的特点，此时，就可以把这些共同点设置到插槽的默认值上</p>
+<ol>
+<li>子组件的slot标签中，设置正常的html标签结构即可;</li>
+<li>当父组件使用子组件时，不传入对应插槽的相关内容时，默认使用slot标签中定义的结构;</li>
+</ol>
+<h5 id="具名插槽"><a href="#具名插槽" class="headerlink" title="具名插槽"></a>具名插槽</h5><p>  场景：如果一个组件中，需要有多个位置设置插槽来进行自定义结构的插入时:</p>
+<ol>
+<li>子组件的slot标签内，设置name属性<br>2. 在父组件的子组件双标签中，设置template标签，在template标签内设置 v-slot:插槽名称 指令，来实现具名插槽的目的</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;slot name=&quot;demo&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;Child&gt;</span><br><span class="line">  &lt;template v-slot:demo&gt;&lt;/template&gt;</span><br><span class="line">	or</span><br><span class="line">  &lt;template #demo&gt;&lt;/template&gt;</span><br><span class="line">&lt;/Child&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="作用域插槽"><a href="#作用域插槽" class="headerlink" title="作用域插槽"></a>作用域插槽</h5><p>  场景： 当父组件中的子组件标签内的插槽部分需要使用到子组件中的某些相关数据时</p>
+<ol>
+<li>子组件的slot标签内， 设置自定义属性，来达到参数传递的目的;<br>2. 在父组件的子组件双标签中，设置的template标签内，使用 v-slot:插槽名称&#x3D;” 自定义变量名称 “ , 该自定义的变量中包含了所有子组件slot标签内所定义的自定义属性的值;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;slot name=&quot;demo&quot; obj=&quot;obj&quot; arr=&quot;arr&quot; str=&quot;str&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;Child&gt;</span><br><span class="line">	&lt;template #demo=&quot;scope&quot;&gt; &#123;&#123; scope.obj / scope.arr / scope.str &#125;&#125; &lt;/template&gt;</span><br><span class="line">&lt;/Child&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 id="17-自定义指令"><a href="#17-自定义指令" class="headerlink" title="17. 自定义指令"></a>17. 自定义指令</h3><blockquote>
 <p>自定义指令的目的是为标签添加额外的功能</p>
 </blockquote>
 <h4 id="17-1-注册"><a href="#17-1-注册" class="headerlink" title="17.1 注册"></a>17.1 注册</h4><h5 id="全局注册"><a href="#全局注册" class="headerlink" title="全局注册"></a><strong>全局注册</strong></h5><p>在main.js用 Vue.directive()方法来进行注册, 以后随便哪个.vue文件里都可以直接用v-gfocus指令；</p>
@@ -585,15 +619,77 @@
 
 
 
+<h3 id="18-Vue路由"><a href="#18-Vue路由" class="headerlink" title="18.Vue路由"></a>18.Vue路由</h3><h4 id="18-1-路由简介"><a href="#18-1-路由简介" class="headerlink" title="18.1 路由简介"></a>18.1 路由简介</h4><p>路由是一对一的映射关系；</p>
+<p>vue中的路由是路径和组件的映射关系，通过路径的不同在页面上展示不同的组件；</p>
+<p><strong>为什么使用路由呢？</strong></p>
+<p><strong>单页面应用(SPA):</strong>  所有功能在<strong>一个html页面上实现</strong></p>
+<p>前端路由作用: 实现业务场景切换</p>
+<p>优点：</p>
+<ul>
+<li><p>整体不刷新页面，用户体验更好</p>
+</li>
+<li><p>数据传递容易, 开发效率高</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>首次加载会比较慢一点。不利于seo（搜索引擎优化）</li>
+</ul>
+<p><strong>总结：</strong></p>
+<ol>
+<li>单页面应用： 所有业务都在一个页面上编写，只有一个html</li>
+<li>通过路由来切换单页面的业务场景</li>
+</ol>
+<h4 id="18-2-vue-router"><a href="#18-2-vue-router" class="headerlink" title="18.2 vue-router"></a>18.2 vue-router</h4><h3 id="1-3-1-介绍"><a href="#1-3-1-介绍" class="headerlink" title="1.3.1 介绍"></a>1.3.1 介绍</h3><blockquote>
+<p>目标: 如何在Vue项目中集成路由</p>
+</blockquote>
+<p>官网: <a target="_blank" rel="noopener" href="https://router.vuejs.org/zh/">https://router.vuejs.org/zh/</a></p>
+<ul>
+<li><p>vue-router模块包</p>
+<ul>
+<li>它和 Vue.js 深度集成</li>
+<li>可以定义 - 视图表(映射规则)</li>
+</ul>
+</li>
+<li><p>模块化的</p>
+</li>
+<li><p>提供2个内置全局组件（router-link，router-view）</p>
+</li>
+<li><p>声明式导航自动激活的 CSS class 的链接</p>
+</li>
+</ul>
+<h3 id="1-3-2-组件分类"><a href="#1-3-2-组件分类" class="headerlink" title="1.3.2 组件分类"></a>1.3.2 组件分类</h3><blockquote>
+<p>目标:  .vue文件分2类, 一个是页面组件, 一个是复用组件</p>
+</blockquote>
+<p>.vue文件本质无区别, 方便大家学习和理解, 总结的一个经验</p>
+<p>src&#x2F;views(或pages) 文件夹 和 src&#x2F;components文件夹</p>
+<ul>
+<li>页面组件 - 页面展示 - 配合路由用</li>
+<li>复用组件 - 展示数据&#x2F;常用于复用</li>
+</ul>
+<blockquote>
+<p>总结: views下的页面组件, 配合路由切换, components下的一般引入到views下的vue中复用展示数据</p>
+</blockquote>
+<h3 id="1-3-3-vue-router使用"><a href="#1-3-3-vue-router使用" class="headerlink" title="1.3.3 vue-router使用"></a>1.3.3 vue-router使用</h3><blockquote>
+<p>目标: 学会vue官方提供的vue-router路由系统功能模块使用</p>
+</blockquote>
+<p>需求： 通过切换不同的路由链接，来实现内容页面的切换</p>
+<p>App.vue - 页面标签和样式准备(&#x3D;&#x3D;可复制继续写&#x3D;&#x3D;)</p>
+<p>分析：</p>
+<ol>
+<li>下载vue-router模块到当前项目</li>
+<li>在main.js中引入VueRouter函数</li>
+<li>在Vue.use()上，添加全局RouterLink和RouterView组件</li>
+<li>创建<strong>路由规则</strong>数组（路由结构） - 保证路径和组件名称一一对应</li>
+<li>利用规则生产路由对象</li>
+<li>把路由对象注入到new Vue实例中</li>
+<li>用router-view作为挂载点，切换不同的路由页面</li>
+</ol>
+<p>main.js 文件中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">// router 的使用</span><br><span class="line">// 1.通过npm i vue-router@3.5.1  安装依赖，  注意：vue2的项目一定在安装的过程中要输入版本号</span><br><span class="line">// 2.引入路由</span><br><span class="line">import VueRouter from &#x27;vue-router&#x27;</span><br><span class="line">// 3.Vue.use()静态方法使用路由</span><br><span class="line">Vue.use(VueRouter)</span><br><span class="line">// 4.创建路由规则数组（列表）</span><br><span class="line">// 4.1 引入组件</span><br><span class="line">import Find from &#x27;./views/find.vue&#x27;</span><br><span class="line">import My from &#x27;./views/my.vue&#x27;</span><br><span class="line">import Part from &#x27;./views/part.vue&#x27;</span><br><span class="line">// 4.2 创建数组</span><br><span class="line">/* </span><br><span class="line">要求1：尽量保持path路由与组件名称一致</span><br><span class="line">要求2：路由规则数组的变量名要求各位固定写出routes，因为在实例化路由的过程中，需要使用routes这个变量名进行解构赋值</span><br><span class="line">*/</span><br><span class="line">let routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;/find&#x27;, // 路由  设置路由时，一定要加/</span><br><span class="line">    component: Find, // 绑定对应组件  组件实例对象</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;/my&#x27;, // 路由  设置路由时，一定要加/</span><br><span class="line">    component: My, // 绑定对应组件  组件实例对象</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;/part&#x27;, // 路由  设置路由时，一定要加/</span><br><span class="line">    component: Part, // 绑定对应组件  组件实例对象</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">// 5.生成路由对象（传入配置对象）</span><br><span class="line">// 要求3：生成路由对象的变量名 router， 固定！！！</span><br><span class="line">const router = new VueRouter(&#123;</span><br><span class="line">  routes, // routes是固定key（传入规则数组）</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">new Vue(&#123;</span><br><span class="line">  // 实例化Vue对象（传入配置对象）</span><br><span class="line">  router, // 6. 挂载到vue实例化对象上</span><br><span class="line">  render: (h) =&gt; h(App), // render渲染： 告诉vue需要渲染什么东西（渲染根组件）</span><br><span class="line">&#125;).$mount(&#x27;#app&#x27;) // 渲染到哪里 =&gt; 将根组件中的内容，替换index.html中id为app的标签</span><br><span class="line"></span><br><span class="line">// 7. 通过在组件中使用 &lt;router-view&gt;&lt;/router-view&gt; 标签来装载需要切换的路由组件内容，其使用效果与 动态组件&lt;component&gt;标签一致</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-
-
-
-
-
-
-
-
+<p>app.vue 中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;a href=&quot;#/find&quot;&gt;发现&lt;/a&gt;</span><br><span class="line">      &lt;a href=&quot;#/my&quot;&gt;我的&lt;/a&gt;</span><br><span class="line">      &lt;a href=&quot;#/part&quot;&gt;朋友&lt;/a&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;!-- </span><br><span class="line">      动态组件用 component 标签来切换</span><br><span class="line">     --&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 路由则使用 router-view 来进行切换 --&gt;</span><br><span class="line">    &lt;router-view&gt;&lt;/router-view&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &quot;App&quot;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
