@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            Hexo
+            跨域解决办法
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -31,291 +31,112 @@
 <meta name="generator" content="Hexo 6.2.0"></head>
 <body>
     <a id="cover"></a>
-    <link type="text/css" rel="stylesheet" href="/css/index.css">
-<div id="count"></div>
-<div id="header" >
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-title">Moooodena</h1>
-                <h2 class="header-description" id="hitokoto"></h2>
-                <h3 class="header-info" id="hitokotoAuthor"></h3>
+                <h1 class="header-subtitle">跨域解决办法</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2022-10-21
+                        </span>
+                        
+                            <span id="/2022/10/21/13. 跨域解决办法/" class="leancloud_visitors" data-flag-title="跨域解决办法">
+                                <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                            </span>
+                        
+                        <span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/10/21/13. 跨域解决办法/"></span>
+                        </span>  
+                    </p>
+                    
+                    
+                </div>
             
         </div>
     </div>
-    
-        <a class="scroll-down" href="javascript:;" target="_self" data-offset="-45">
-            <i class="scroll-down-icon iconfont icon-return"></i>
-        </a>
     
 </div>
 <div id="container">
     
-        
-            <!-- 首页 -->
-            <div class="articles">
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h2 id="跨域解决办法"><a href="#跨域解决办法" class="headerlink" title="跨域解决办法"></a>跨域解决办法</h2><h3 id="1-同源及同源策略"><a href="#1-同源及同源策略" class="headerlink" title="1. 同源及同源策略"></a>1. 同源及同源策略</h3><p><strong>什么是同源</strong>？</p>
+<p>答：如果两个页面的<strong>协议，域名和端口号</strong>都相同，则两个页面具有相同的源，简称同源；</p>
+<p>例如，下面给出了相对于 <a target="_blank" rel="noopener" href="http://www.test.com/index.html">http://www.test.com/index.html</a> 页面的同源检测</p>
+<img src="/image-20221021193522029.png" alt="image-20221021193522029" style="zoom: 67%;" />
+
+<p><strong>什么是同源策略</strong>？</p>
+<p>答：浏览器为了安全考虑，所以规定：非同源的两个网站之间不允许相互访问对方的数据。这些数据有：</p>
+<p>① 无法读取非同源网页的 Cookie、LocalStorage 和 IndexedDB ；</p>
+<p>② 无法获取非同源网页的 DOM； </p>
+<p>③ 无法向非同源地址发送 Ajax 请求（注意：浏览器的同源策略只限制ajax请求，对<code>&lt;link href=&quot;&quot;&gt;、&lt;script src=&quot;&quot;&gt;、&lt;img src=&quot;&quot;&gt;</code>不做限制）；</p>
+<h3 id="2-ajax请求同源策略的原理"><a href="#2-ajax请求同源策略的原理" class="headerlink" title="2.ajax请求同源策略的原理"></a>2.ajax请求同源策略的原理</h3><img src="/image-20221021194001058.png" alt="image-20221021194001058" style="zoom:67%;" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/11/12/vuex%E4%BD%BF%E7%94%A8/">Vue3中Vuex的使用</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-11-12
-                            </span>
-                            
-                                <span id="/2022/11/12/vuex使用/" class="leancloud_visitors" data-flag-title="Vue3中Vuex的使用">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/12/vuex使用/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Moooodena">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Moooodena
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/10/21/13.%20%E8%B7%A8%E5%9F%9F%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" target="_blank">跨域解决办法</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
                 
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/11/12/vue-router%E4%BD%BF%E7%94%A8/">Vue3中vue-Router的使用</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-11-12
-                            </span>
-                            
-                                <span id="/2022/11/12/vue-router使用/" class="leancloud_visitors" data-flag-title="Vue3中vue-Router的使用">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/12/vue-router使用/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
                 
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/11/12/vue3%E7%BB%84%E4%BB%B6/">Vue3组件通信 混入</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-11-12
-                            </span>
-                            
-                                <span id="/2022/11/12/vue3组件/" class="leancloud_visitors" data-flag-title="Vue3组件通信 混入">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/12/vue3组件/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/11/12/vue3%E5%9F%BA%E7%A1%8002/">Vue3基础-02</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-11-12
-                            </span>
-                            
-                                <span id="/2022/11/12/vue3基础02/" class="leancloud_visitors" data-flag-title="Vue3基础-02">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/12/vue3基础02/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/11/12/vue3%E5%9F%BA%E7%A1%8001/">Vue3基础-01</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-11-12
-                            </span>
-                            
-                                <span id="/2022/11/12/vue3基础01/" class="leancloud_visitors" data-flag-title="Vue3基础-01">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/12/vue3基础01/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/10/28/14.%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96%E7%9B%B8%E5%85%B3/">代码优化相关</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-10-28
-                            </span>
-                            
-                                <span id="/2022/10/28/14.代码优化相关/" class="leancloud_visitors" data-flag-title="代码优化相关">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/10/28/14.代码优化相关/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/10/21/13.%20%E8%B7%A8%E5%9F%9F%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">跨域解决办法</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-10-21
-                            </span>
-                            
-                                <span id="/2022/10/21/13. 跨域解决办法/" class="leancloud_visitors" data-flag-title="跨域解决办法">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/10/21/13. 跨域解决办法/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/09/15/Vue/">Vue基础（持续更新）</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-09-15
-                            </span>
-                            
-                                <span id="/2022/09/15/Vue/" class="leancloud_visitors" data-flag-title="Vue基础（持续更新）">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/09/15/Vue/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/20/12.Web%20API/">Web API</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-20
-                            </span>
-                            
-                                <span id="/2022/08/20/12.Web API/" class="leancloud_visitors" data-flag-title="Web API">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/20/12.Web API/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
-                    <div class="article">
-                        <div class="article-title">
-                            <a href="/2022/08/19/11.%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95%E7%9B%B8%E5%85%B3/">对象的方法相关</a>
-                            
-                        </div>
-                        <div class="article-abstract">
-                            
-                        </div>
-                        <div class="clear"></div>
-                        <div class="article-info">
-                            <span>
-                                <i class="iconfont icon-time"></i> 发表时间：2022-08-19
-                            </span>
-                            
-                                <span id="/2022/08/19/11.对象的方法相关/" class="leancloud_visitors" data-flag-title="对象的方法相关">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            <span>
-                                <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/08/19/11.对象的方法相关/"></span>
-                            </span>
-                        </div>
-                        <div class="clear"></div>     
-                    </div>
-                
+                <div class="article-prev-next">
+                    
+                        <a href="/2022/10/28/14.%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96%E7%9B%B8%E5%85%B3/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/10/28/14.%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96%E7%9B%B8%E5%85%B3/" title="发布于 2022-10-28 08:57">代码优化相关</a>
+                        <br>
+                    
+                    
+                        <a href="/2022/09/15/Vue/" class="next-prefix">» </a> 下一篇：    <a href="/2022/09/15/Vue/" title="发布于 2022-09-15 07:53">Vue基础（持续更新）</a>
+                    
+                </div>
             </div>
             
+    <div class="article-comments">
         
-    <div class="pagination-bottom">
-        <div class="pagination">
-            
-                <a href="/page/2/">下一页</a>
-            
-        </div>
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
     </div>
 
+        </div>
     
 </div>
     <div id="footer"></div>
@@ -341,7 +162,7 @@
             <div class="menu-list">
                 <ul>
                     
-                        <li class=" active "><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
                     
                         <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
                     

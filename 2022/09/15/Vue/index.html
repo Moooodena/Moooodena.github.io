@@ -90,7 +90,7 @@
 <p> 在Vue中通过双花括号的形式来构架插值表达式</p>
 </blockquote>
 <p>语法：<code>&#123;&#123; 表达式(< > >= == === ! && || 三目运算 变量) &#125;&#125;</code></p>
-<p>简单来说，就是在标签里写js代码，插值表达式就是替换了js中的innerText；</p>
+<p>简单来说，<strong>就是在标签里写js代码，插值表达式就是替换了js中的innerText</strong>；</p>
 <p>注意：一个vue文件中，<strong>声明的变量需要放置在data函数的return对象上</strong>！！！</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;!-- 1.小技巧：通过&lt;vue 来快捷部署页面结构 --&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;!-- 通过双花括号的形式来构架插值表达式</span><br><span class="line">    &#123;&#123; 表达式(&lt; &gt; &gt;= == === ! &amp;&amp; || 三目运算 变量) &#125;&#125;</span><br><span class="line">    简单来说，就是在标签里写js代码</span><br><span class="line">    插值表达式就是替换了js中的innerText --&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; 1 + 1 &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; msg &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; obj.name &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; obj.age &gt;= 18 ? &#x27;成年&#x27;: &#x27;未成年&#x27; &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    // 2. 给每一个vue文件起一个名字(要求：组件的名称一般情况下是全英文且需要多个单词驼峰式命名，</span><br><span class="line">    // 但是在初期学习阶段，起名比较困难，可以随便起一个名字加序号后面接一个 - 来表示名称)</span><br><span class="line">    // 为什么这么做：eslint 代码规范要求我们需要设置多个单词组成词组的文件名称，而短横线可以屏蔽这一判断</span><br><span class="line">    name: &#x27;demo-01&#x27;,</span><br><span class="line"></span><br><span class="line">    // 3. 一个vue文件中，声明的变量需要放置在data函数的return对象上</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            msg: &#x27;插值表达式&#x27;,</span><br><span class="line">            obj: &#123;</span><br><span class="line">                name: &#x27;张三&#x27;,</span><br><span class="line">                age: 18</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
@@ -151,7 +151,7 @@
 </code></pre>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;div&gt;当前数字count: &#123;&#123; count &#125;&#125;&lt;/div&gt;</span><br><span class="line">        &lt;button v-on:click=&quot;count++&quot;&gt;点击后count+1&lt;/button&gt;</span><br><span class="line">        &lt;button v-on:click=&quot;addFn&quot;&gt;点击后count+2&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/template&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;script&gt;</span><br><span class="line">  export default &#123;</span><br><span class="line">    name: &#x27;demo-03&#x27;,</span><br><span class="line">    //   页面中要用的变量</span><br><span class="line">      data() &#123;</span><br><span class="line">          return &#123;</span><br><span class="line">           count:1</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    //   methods 里定义这个vue文件中所需要使用的方法</span><br><span class="line">    methods: &#123;</span><br><span class="line">        // 触发后count 加 2</span><br><span class="line">        addFn(event) &#123;</span><br><span class="line">            // this 代表 export default&#123;&#125; 对象，data和methods里的属性都挂载在这个对象上</span><br><span class="line">            this.count += 2</span><br><span class="line">            console.log(event)</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;style&gt;</span><br><span class="line">  &lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
-<p>注意<code>export default&#123; &#125;</code>里的<code>this</code>，它指的是<code>export default&#123; &#125;</code>这个对象，<code>data</code>和<code>methods</code>里的属性都挂载在这个对象上；</p>
+<p>注意 <strong><code>export default&#123; &#125;</code>里的<code>this</code>，它指的是<code>export default&#123; &#125;</code>这个对象，<code>data</code>和<code>methods</code>里的属性都挂载在这个对象上；</strong></p>
 <h4 id="4-2-v-on的事件对象-—event"><a href="#4-2-v-on的事件对象-—event" class="headerlink" title="4.2 v-on的事件对象 —event"></a>4.2 v-on的事件对象 —event</h4><p> v-on 获取事件对象   <strong>event</strong> </p>
 <ol>
 <li><p>无参数获取事件对象  我们的事件对象**<code>event</code>默认在第一个形参上**；</p>
@@ -194,7 +194,10 @@
 
 
 
-<h3 id="5-v-model"><a href="#5-v-model" class="headerlink" title="5. v-model"></a>5. v-model</h3><h4 id="5-1-v-model-使用"><a href="#5-1-v-model-使用" class="headerlink" title="5.1 v-model 使用"></a>5.1 v-model 使用</h4><ol>
+<h3 id="5-v-model"><a href="#5-v-model" class="headerlink" title="5. v-model"></a>5. v-model</h3><blockquote>
+<p>Vue内部的<code>v-model</code>是完成 <strong>事件绑定</strong> 和 <strong>事件监听</strong> 的语法糖</p>
+</blockquote>
+<h4 id="5-1-v-model-使用"><a href="#5-1-v-model-使用" class="headerlink" title="5.1 v-model 使用"></a>5.1 v-model 使用</h4><ol>
 <li><p>数据变化 &#x3D;&gt; 视图自动变化</p>
 </li>
 <li><p>视图变化 &#x3D;&gt; 数据自动变化</p>
@@ -231,6 +234,9 @@
 <p><code>v-show</code> 是采用<code>display:none</code>的方式进行显示和隐藏的，<strong>其实不管怎么说这个元素还是在dom树上；</strong></p>
 <p><code>v-if</code> 是采用删除、添加dom元素来进行显示和隐藏的， <strong>隐藏时其实是将当前的元素从dom上直接删除</strong>；</p>
 <p>注意事项： 一般情况下**使用<code>v-show</code>来进行显示隐藏的元素都是静态元素(它内部没有动态的变量控制)**，除此以外均建议使用v-if来进行显示和隐藏；</p>
+<p>什么时候该用什么方法呢？</p>
+<p>场景1：追求首次的加载速度， 用 v-if</p>
+<p>场景2：业务是频繁切换， 用 v-show</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">        &lt;h1 v-show=&quot;flag&quot;&gt;v-show的特点&lt;/h1&gt;</span><br><span class="line">        &lt;h1 v-if=&quot;flag&quot;&gt;v-if的特点&lt;/h1&gt;</span><br><span class="line">        &lt;!-- 关于v-if 和js中的if很像</span><br><span class="line">        if判断它有 else if 还有 else 与之形成组合</span><br><span class="line">        v-if也有 v-else-if 和 v-else 与之配合</span><br><span class="line">         他们之间的使用方式与表现结果是完全一样的 </span><br><span class="line"></span><br><span class="line">        在js中if是如何表现的</span><br><span class="line">        特点：有特定顺序，连续性</span><br><span class="line">        if () &#123; // 开头</span><br><span class="line">        &#125; else if () &#123; // 过程</span><br><span class="line">        &#125; else &#123;&#125; // 结尾</span><br><span class="line"></span><br><span class="line">        场景： 通过年龄的不同在页面上展示不同的效果</span><br><span class="line">        1. 小于18岁 =&gt; 未成年</span><br><span class="line">        2. 大于等于18岁，小于22岁 =&gt; 大学生</span><br><span class="line">        3. 大于等于22岁 =&gt; 社畜</span><br><span class="line">        --&gt;</span><br><span class="line">         &lt;!-- </span><br><span class="line">         v-if v-else-if v-else 同样遵循js中if的特点，有特定顺序，连续性</span><br><span class="line">        --&gt;</span><br><span class="line"></span><br><span class="line">         &lt;div v-if=&quot;age &lt; 18&quot;&gt;未成年&lt;/div&gt;</span><br><span class="line">         &lt;div v-if=&quot;age &gt;= 18 &amp;&amp; age &lt; 22&quot;&gt;大学生&lt;/div&gt;</span><br><span class="line">         &lt;div v-if=&quot;age &gt;= 22&quot;&gt;社畜&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    name: &#x27;demo-08&#x27;,</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            flag: false,</span><br><span class="line">            age:&#x27;24&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
 
@@ -251,6 +257,9 @@
 
 
 
+<p><strong>拓展：v-for 和 v-if 的优先级</strong></p>
+<p>在vue2 中，for &gt; if</p>
+<p>在vue3 中， if &gt; for</p>
 <h4 id="8-3-v-for的更新监测"><a href="#8-3-v-for的更新监测" class="headerlink" title="8.3 v-for的更新监测"></a>8.3 v-for的更新监测</h4><ol>
 <li><p>当v-for遍历的数组发生变化时，(一定是得发生变化) , 会触发v-for的遍历更新；</p>
 </li>
@@ -304,20 +313,41 @@
 
 
 
-<h3 id="11-Vue计算属性-computed"><a href="#11-Vue计算属性-computed" class="headerlink" title="11. Vue计算属性 computed"></a>11. Vue计算属性 computed</h3><p> computed计算属性语法：在data同级，创建computed</p>
+<h3 id="11-Vue计算属性-computed"><a href="#11-Vue计算属性-computed" class="headerlink" title="11. Vue计算属性 computed"></a>11. Vue计算属性 computed</h3><blockquote>
+<p>应用场景：数据要进行二次计算（复杂的计算）的情况下，且代码量比较大的情况下，不建议直接在template部分进行计算，建议在computed中进行计算和维护；</p>
+</blockquote>
+<p> computed计算属性语法：在data同级，创建computed；</p>
+<p>写法一：单向数据流 &#x3D;&gt; 不可以修改 ，用 v-model 也不行，会报错</p>
 <p>   <code>computed: &#123;</code></p>
 <p>​    <code>&#39;自定义的计算属性名称&#39; () &#123;</code></p>
 <p>​     <code>return &#39;计算后返回的值&#39;</code></p>
 <p>​    <code>&#125;</code></p>
 <p>   <code>&#125;</code></p>
+<p>写法二：  可以修改数据    注意是对象形式</p>
+<p>  <code>computed: &#123;</code></p>
+<p>​    <code>&#39;自定义的计算属性名称&#39; ： &#123;</code></p>
+<p>​     <code>get()&#123;</code></p>
+<p>​    <code> return ‘页面中要展示的数据’</code>  &#x2F;&#x2F; 和基本写法一样，计算后的结果</p>
+<p><code>           &#125;</code>,</p>
+<p><code>set(value)&#123;</code></p>
+<p><code>this.str = value</code></p>
+<p><code>&#125;</code></p>
+<p>​    <code>&#125;</code></p>
+<p>   <code>&#125;</code></p>
 <p>   计算属性的使用： 与data中的变量的使用方式是一样的；</p>
 <p>   注意事项：data中的变量与计算属性的名称不可以相同；</p>
-<p>   计算属性的特点： 计算属性具有缓存结果的特点，计算属性基于它的依赖项（计算属性中所使用的其他变量）进行计算的结果会缓存起来，</p>
+<p>   <strong>计算属性的特点</strong>： 计算属性具有缓存结果的特点，计算属性基于它的依赖项（计算属性中所使用的其他变量）进行计算的结果会缓存起来，</p>
 <p>   只要依赖项的值不变，那么下次使用计算属性时不必进行计算，只会返回缓存中的结果，对于代码效率来说是比较高的</p>
 <p>   <strong>计算属性的优缺点</strong>：</p>
 <p>   优点：因为缓存机制，所以不会重复的进行计算，页面效率高</p>
 <p>   缺点：因为缓存机制，计算属性会消耗内存</p>
 <p>   —- <strong>空间换时间</strong> —-</p>
+<p><strong>面试点</strong>：</p>
+<p><strong>computed和methods的区别</strong>：</p>
+<p>computed有缓存机制；methods没有缓存机制；</p>
+<p>应用场景： 后端返回的时间戳，在computed进行处理，在页面展示为2022-xx-xx；</p>
+<p><strong>computed里面有一个str，，加上v-model展示到视图上，可以修改吗？</strong></p>
+<p>可以，但是要写成get和set的形式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div&gt;a: &#123;&#123; a &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;b: &#123;&#123; b &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;c = a + b: &#123;&#123; c &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;c = a + b: &#123;&#123; c &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;c = a + b: &#123;&#123; c &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;c = a + b(function) : &#123;&#123; sum() &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;c = a + b(function) : &#123;&#123; sum() &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;c = a + b(function) : &#123;&#123; sum() &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      a: 10,</span><br><span class="line">      b: 20,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 计算属性:</span><br><span class="line">  // 场景: 一个变量的值, 需要用另外变量计算而得来</span><br><span class="line">  /*</span><br><span class="line">      语法:</span><br><span class="line">      computed: &#123;</span><br><span class="line">        计算属性名 () &#123;</span><br><span class="line">          return 值</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    */</span><br><span class="line">  // 注意: 计算属性和data属性都是变量-不能重名</span><br><span class="line">  // 注意2: 函数内变量变化, 会自动重新计算结果返回</span><br><span class="line">  computed: &#123;</span><br><span class="line">    c() &#123;</span><br><span class="line">      console.log(&quot;计算属性&quot;);</span><br><span class="line">      return this.a + this.b;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    // 这个方法不能直接用在插值表达式中 - 可以</span><br><span class="line">    sum() &#123;</span><br><span class="line">      console.log(&quot;方法&quot;);</span><br><span class="line">      return this.a + this.b;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
 
@@ -344,13 +374,13 @@
 <p><strong>总结</strong>： 只要不进行新旧数据的对比，就可以不传任何参数；</p>
 <p><code>&#39;被监听的变量&#39; () &#123;&#125;</code></p>
 <p>监听器的完整写法：</p>
-<p>   <code>&#39;被监听的变量&#39;: &#123;</code></p>
-<p>​    <code>handler () &#123;&#125;,</code></p>
-<p>​    <code>deep: true,  启动深度监听复杂数据类型</code></p>
-<p>​    <code>immediate: true  立即执行监听 - 当监听器生成时，会立即执行一次handler中的逻辑</code></p>
-<p>   <code>&#125;</code></p>
+<p>   <strong><code>&#39;被监听的变量&#39;: &#123;</code></strong></p>
+<p>​    <strong><code>handler () &#123;&#125;,</code></strong></p>
+<p>​    <strong><code>deep: true,  启动深度监听复杂数据类型</code></strong></p>
+<p>​    <strong><code>immediate: true  立即执行监听 - 当监听器生成时，会立即执行一次handler中的逻辑</code></strong></p>
+<p>   **<code>&#125;**</code></p>
 <p><strong>特点</strong>：</p>
-<p>现象: 监听复杂数据类型，发现newvalue和oldvalue都是新数据，这是因为复杂数据类型的数据存在堆内存中，</p>
+<p><strong>现象</strong>: 监听复杂数据类型，发现newvalue和oldvalue都是新数据，这是因为复杂数据类型的数据存在堆内存中，</p>
 <p>而监听的目标则是栈中的堆内存地址。所以说当堆中的数据发生变化时， 不管是newValue栈中的地址还是oldvalue栈中的地址，都指向统一个堆，没有旧数据的记录；</p>
 <p><strong>结论: 复杂数据类型的监听不必写任何参数；</strong></p>
 <p>今后如何使用监听器：</p>
@@ -706,8 +736,8 @@
 
 
 <h5 id="跳转传参"><a href="#跳转传参" class="headerlink" title="跳转传参"></a>跳转传参</h5><p>在router-link 的to 属性上进行传参，主要有两种方法：</p>
-<p><strong>方法一</strong>：<code>/path?参数名=值</code> 用来传递参数，<code>$router.query.参数名</code> 来接收参数；</p>
-<p><strong>方法二</strong>：<code>/path/值</code> – 需要路由对象提前配置 <code>path: “/path/参数名”</code>，  <code>$router.params.参数名</code> 来接收参数；</p>
+<p><strong>方法一</strong>：<code>/path?参数名=值</code> 用来传递参数，<code>$route.query.参数名</code> 来接收参数；</p>
+<p><strong>方法二</strong>：<code>/path/值</code> – 需要路由对象提前配置 <code>path: “/path/参数名”</code>，  <code>$route.params.参数名</code> 来接收参数；</p>
 <img src="/../%E5%A3%B0%E6%98%8E%E5%BC%8F%E5%AF%BC%E8%88%AA%E4%BC%A0%E5%8F%82.png" style="zoom:67%;" />
 
 <img src="/../%E5%A3%B0%E6%98%8E%E5%BC%8F%E5%AF%BC%E8%88%AA%E4%BC%A0%E5%8F%82%E6%96%B9%E6%B3%95%E4%BA%8C.png" style="zoom: 67%;" />
@@ -719,7 +749,7 @@
 <h4 id="18-4-编程式导航"><a href="#18-4-编程式导航" class="headerlink" title="18.4 编程式导航"></a>18.4 编程式导航</h4><blockquote>
 <p>用js的方式实现</p>
 </blockquote>
-<h5 id="基本使用-1"><a href="#基本使用-1" class="headerlink" title="基本使用"></a>基本使用</h5><p>编程式导航的跳转方式</p>
+<h5 id="基本使用-1"><a href="#基本使用-1" class="headerlink" title="基本使用"></a>基本使用</h5><p>编程式导航的跳转方式  (如点击事件方法里面的代码)</p>
 <p><code>$router.push(&#123; path: &#39;路由路径&#39; &#125;)</code></p>
 <p>​      例如： <code>$router.push(&#123; path: &#39;/find&#39; &#125;)</code></p>
 <p><code>$router.push(&#123; name: &#39;路由名称&#39; &#125;)</code></p>
@@ -739,7 +769,7 @@
 <p><strong>现象</strong>：</p>
 <p>params对象传参，不会将参数显示到url上，而且当刷新页面时数据会丢失,数据存在缓存当中</p>
 <p>通过path跳转，params传参的形式，无法在路由组件中获取到数据</p>
-<p><strong>结论</strong>：params传参必须通过name来进行跳转，不能</p>
+<p><strong>结论</strong>：params传参必须通过name来进行跳转，不能用path跳转，会忽略掉params；</p>
 <h4 id="18-5-路由嵌套"><a href="#18-5-路由嵌套" class="headerlink" title="18.5 路由嵌套"></a>18.5 路由嵌套</h4><blockquote>
 <p> 在现有的一级路由下, 再嵌套二级路由</p>
 </blockquote>
@@ -755,7 +785,7 @@
 <li>如何让一级路由展示时默认开启某个二级路由</li>
 </ol>
 <p>  3.1 让某个二级路由作为默认值 &#x3D;》 将一个path设置为 ‘’ 空字符串，但是这种方式是存在问题的；</p>
-<p> 3.2 通过重定向来实现默认展示（工作中最为标准的展示默认路由的方式）；</p>
+<p>​       3.2 通过重定向来实现默认展示（工作中最为标准的展示默认路由的方式）；</p>
 <p>  当路由跳转到目标一级路由时，在一级路由中设置重定向属性，定向到二级路由；</p>
 <p>小结：</p>
 <ul>
@@ -822,6 +852,9 @@
                 
                 
                 <div class="article-prev-next">
+                    
+                        <a href="/2022/10/21/13.%20%E8%B7%A8%E5%9F%9F%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/10/21/13.%20%E8%B7%A8%E5%9F%9F%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" title="发布于 2022-10-21 07:29">跨域解决办法</a>
+                        <br>
                     
                     
                         <a href="/2022/08/20/12.Web%20API/" class="next-prefix">» </a> 下一篇：    <a href="/2022/08/20/12.Web%20API/" title="发布于 2022-08-20 07:30">Web API</a>
